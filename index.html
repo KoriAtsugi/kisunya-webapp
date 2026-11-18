@@ -3,29 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Кисуня — Коллекция</title>
+<title>Кисуня</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{background:#0a0e1a;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;padding-bottom:100px;overflow-x:hidden}
+body{background:#0a0e1a;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;padding-bottom:100px}
 body::before{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at 20% 30%,rgba(139,92,246,.15) 0%,transparent 50%),radial-gradient(circle at 80% 70%,rgba(59,130,246,.15) 0%,transparent 50%);animation:bgFloat 20s ease-in-out infinite;z-index:-1}
 @keyframes bgFloat{0%,100%{transform:translate(0,0)}50%{transform:translate(-2%,-2%)}}
-.profile-header{background:linear-gradient(135deg,rgba(139,92,246,.2),rgba(59,130,246,.1));border:1px solid rgba(139,92,246,.3);border-radius:24px;padding:24px 20px;margin-bottom:20px;backdrop-filter:blur(10px)}
-.avatar-ring{width:110px;height:110px;border-radius:50%;padding:4px;background:conic-gradient(from 0deg,#8b5cf6,#3b82f6,#ec4899,#8b5cf6);animation:spin 8s linear infinite;margin:0 auto 12px}
+.profile-header{background:linear-gradient(135deg,rgba(139,92,246,.2),rgba(59,130,246,.1));border:1px solid rgba(139,92,246,.3);border-radius:20px;padding:20px;margin-bottom:16px}
+.avatar-ring{width:90px;height:90px;border-radius:50%;padding:3px;background:conic-gradient(from 0deg,#8b5cf6,#3b82f6,#ec4899,#8b5cf6);animation:spin 8s linear infinite;margin:0 auto 10px}
 @keyframes spin{to{transform:rotate(360deg)}}
-.avatar-inner{width:100%;height:100%;border-radius:50%;background:#1e293b;display:flex;align-items:center;justify-content:center;font-size:3.5rem;animation:spin 8s linear infinite reverse}
-.balance-chip{background:rgba(30,41,59,.8);border:1px solid rgba(148,163,184,.2);border-radius:999px;padding:8px 14px;font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:6px}
-.progress-wrap{background:rgba(30,41,59,.6);border-radius:16px;padding:16px;margin-bottom:20px;border:1px solid rgba(148,163,184,.1)}
-.progress-bar{height:10px;background:rgba(15,23,42,.8);border-radius:999px;overflow:hidden;margin-top:10px}
-.progress-fill{height:100%;background:linear-gradient(90deg,#8b5cf6,#3b82f6,#06b6d4);border-radius:999px;transition:width 1.5s}
-.tabs{display:flex;gap:6px;margin-bottom:20px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.avatar-inner{width:100%;height:100%;border-radius:50%;background:#1e293b;display:flex;align-items:center;justify-content:center;font-size:2.8rem;animation:spin 8s linear infinite reverse}
+.balance-chip{background:rgba(30,41,59,.8);border:1px solid rgba(148,163,184,.2);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:5px}
+.progress-wrap{background:rgba(30,41,59,.6);border-radius:14px;padding:14px;margin-bottom:16px;border:1px solid rgba(148,163,184,.1)}
+.progress-bar{height:8px;background:rgba(15,23,42,.8);border-radius:999px;overflow:hidden;margin-top:8px}
+.progress-fill{height:100%;background:linear-gradient(90deg,#8b5cf6,#3b82f6);border-radius:999px;transition:width 1.5s}
+.tabs{display:flex;gap:5px;margin-bottom:16px;overflow-x:auto;padding-bottom:3px}
 .tabs::-webkit-scrollbar{display:none}
-.tab-btn{padding:10px 14px;border-radius:14px;background:rgba(30,41,59,.8);border:1px solid rgba(148,163,184,.15);color:#94a3b8;font-weight:600;font-size:13px;white-space:nowrap;cursor:pointer;flex-shrink:0}
+.tab-btn{padding:9px 12px;border-radius:12px;background:rgba(30,41,59,.8);border:1px solid rgba(148,163,184,.15);color:#94a3b8;font-weight:600;font-size:12px;white-space:nowrap;cursor:pointer;flex-shrink:0}
 .tab-btn.active{background:linear-gradient(135deg,#8b5cf6,#3b82f6);color:#fff;border-color:transparent}
-.rarity-filters{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.rarity-filters{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:3px}
 .rarity-filters::-webkit-scrollbar{display:none}
-.rarity-chip{padding:8px 14px;border-radius:999px;background:rgba(30,41,59,.8);border:1px solid rgba(148,163,184,.15);color:#94a3b8;font-size:12px;font-weight:600;white-space:nowrap;cursor:pointer}
+.rarity-chip{padding:7px 12px;border-radius:999px;background:rgba(30,41,59,.8);border:1px solid rgba(148,163,184,.15);color:#94a3b8;font-size:11px;font-weight:600;white-space:nowrap;cursor:pointer}
 .rarity-chip.active{color:#fff;transform:scale(1.05)}
 .rarity-chip[data-r="all"].active{background:linear-gradient(135deg,#6366f1,#8b5cf6)}
 .rarity-chip[data-r="common"].active{background:#6b7280}
@@ -34,62 +34,63 @@ body::before{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%
 .rarity-chip[data-r="epic"].active{background:#7c3aed}
 .rarity-chip[data-r="legendary"].active{background:#d97706}
 .rarity-chip[data-r="ultra"].active{background:linear-gradient(90deg,#be123c,#fbbf24)}
-.cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.card{position:relative;border-radius:16px;aspect-ratio:3/4;overflow:hidden;cursor:pointer;transition:all .3s}
+.cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.card{position:relative;border-radius:14px;aspect-ratio:3/4;overflow:hidden;cursor:pointer;transition:all .3s}
 .card:active{transform:scale(.92)}
-.card-bg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:3.5rem}
-.card-info{position:absolute;bottom:0;left:0;right:0;padding:10px 8px 8px;background:linear-gradient(to top,rgba(0,0,0,.9),transparent);text-align:center}
-.card-name{font-size:11px;font-weight:700}
-.card-count{position:absolute;top:6px;left:6px;background:rgba(0,0,0,.6);border-radius:999px;padding:2px 8px;font-size:10px;font-weight:700}
+.card-bg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:3rem}
+.card-info{position:absolute;bottom:0;left:0;right:0;padding:8px 6px 6px;background:linear-gradient(to top,rgba(0,0,0,.9),transparent);text-align:center}
+.card-name{font-size:10px;font-weight:700}
+.card-level{position:absolute;top:5px;right:5px;background:rgba(0,0,0,.7);border-radius:999px;padding:2px 7px;font-size:9px;font-weight:700;border:1px solid rgba(255,255,255,.3)}
+.card-exp{position:absolute;top:5px;left:5px;background:rgba(139,92,246,.8);border-radius:999px;padding:2px 7px;font-size:9px;font-weight:700}
 .r-common{background:linear-gradient(135deg,#4b5563,#9ca3af)}
 .r-uncommon{background:linear-gradient(135deg,#065f46,#34d399)}
-.r-rare{background:linear-gradient(135deg,#1e40af,#60a5fa);box-shadow:0 0 20px rgba(96,165,250,.5)}
-.r-epic{background:linear-gradient(135deg,#5b21b6,#a78bfa);box-shadow:0 0 25px rgba(167,139,250,.6)}
-.r-legendary{background:linear-gradient(135deg,#92400e,#fbbf24);box-shadow:0 0 30px rgba(251,191,36,.7)}
-.r-ultra{background:linear-gradient(135deg,#881337,#fbbf24);box-shadow:0 0 35px rgba(244,63,94,.8)}
+.r-rare{background:linear-gradient(135deg,#1e40af,#60a5fa);box-shadow:0 0 15px rgba(96,165,250,.5)}
+.r-epic{background:linear-gradient(135deg,#5b21b6,#a78bfa);box-shadow:0 0 20px rgba(167,139,250,.6)}
+.r-legendary{background:linear-gradient(135deg,#92400e,#fbbf24);box-shadow:0 0 25px rgba(251,191,36,.7)}
+.r-ultra{background:linear-gradient(135deg,#881337,#fbbf24);box-shadow:0 0 30px rgba(244,63,94,.8)}
 .card.locked{filter:grayscale(1) brightness(.4);opacity:.5}
-.card.locked .card-bg{font-size:2.5rem}
+.card.locked .card-bg{font-size:2.2rem}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
 .modal.active{display:flex}
-.modal-content{background:linear-gradient(135deg,#1e293b,#0f172a);border:1px solid rgba(139,92,246,.3);border-radius:24px;padding:24px;max-width:340px;width:100%}
+.modal-content{background:linear-gradient(135deg,#1e293b,#0f172a);border:1px solid rgba(139,92,246,.3);border-radius:20px;padding:20px;max-width:320px;width:100%}
 .pack-opening{position:fixed;inset:0;background:radial-gradient(circle,rgba(139,92,246,.3),rgba(10,14,26,.95));display:none;align-items:center;justify-content:center;z-index:200;flex-direction:column}
 .pack-opening.active{display:flex}
-.pack-box{font-size:8rem;animation:packShake .6s ease-in-out 3}
+.pack-box{font-size:7rem;animation:packShake .6s ease-in-out 3}
 @keyframes packShake{0%,100%{transform:rotate(0) scale(1)}25%{transform:rotate(-10deg) scale(1.1)}75%{transform:rotate(10deg) scale(1.1)}}
-.btn-primary{background:linear-gradient(135deg,#8b5cf6,#3b82f6);color:#fff;padding:14px 20px;border-radius:16px;font-weight:700;font-size:15px;border:none;cursor:pointer;width:100%;box-shadow:0 8px 24px rgba(139,92,246,.4);margin-bottom:12px}
+.btn-primary{background:linear-gradient(135deg,#8b5cf6,#3b82f6);color:#fff;padding:12px 16px;border-radius:14px;font-weight:700;font-size:14px;border:none;cursor:pointer;width:100%;box-shadow:0 6px 20px rgba(139,92,246,.4);margin-bottom:10px}
 .btn-primary:active{transform:scale(.97)}
 .btn-danger{background:linear-gradient(135deg,#ef4444,#dc2626)}
 .btn-gold{background:linear-gradient(135deg,#fbbf24,#d97706)}
-.btn-rare{background:linear-gradient(135deg,#3b82f6,#1d4ed8)}
-.btn-legendary{background:linear-gradient(135deg,#f59e0b,#d97706)}
-.section-title{font-size:13px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;margin:20px 0 12px}
-.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#8b5cf6,#3b82f6);color:#fff;padding:14px 24px;border-radius:16px;font-weight:600;z-index:300;animation:toastIn .4s}
+.section-title{font-size:12px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;margin:16px 0 10px}
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#8b5cf6,#3b82f6);color:#fff;padding:12px 20px;border-radius:14px;font-weight:600;z-index:300;animation:toastIn .4s}
 @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
-.input-field{width:100%;background:rgba(15,23,42,.8);border:1px solid rgba(148,163,184,.2);border-radius:12px;padding:12px 16px;color:#fff;font-size:14px;margin-bottom:12px;outline:none}
-.owner-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.event-card{background:rgba(30,41,59,.8);border:1px solid rgba(139,92,246,.3);border-radius:16px;padding:16px;margin-bottom:12px}
+.input-field{width:100%;background:rgba(15,23,42,.8);border:1px solid rgba(148,163,184,.2);border-radius:10px;padding:10px 14px;color:#fff;font-size:13px;margin-bottom:10px;outline:none}
+.owner-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.event-card{background:rgba(30,41,59,.8);border:1px solid rgba(139,92,246,.3);border-radius:14px;padding:14px;margin-bottom:10px}
+.pack-card{background:rgba(30,41,59,.8);border-radius:18px;padding:16px;margin-bottom:14px;cursor:pointer;transition:all .3s}
+.pack-card:active{transform:scale(.97)}
+.pack-card.common{border:1px solid rgba(156,163,175,.4)}
+.pack-card.rare{border:1px solid rgba(59,130,246,.5);box-shadow:0 0 15px rgba(59,130,246,.2)}
+.pack-card.legendary{border:1px solid rgba(251,191,36,.5);box-shadow:0 0 20px rgba(251,191,36,.3)}
+.pack-icon{font-size:3rem;text-align:center;margin-bottom:10px}
+.pack-title{font-size:16px;font-weight:700;text-align:center;margin-bottom:6px}
+.pack-desc{font-size:12px;opacity:70;text-align:center;margin-bottom:10px}
+.pack-price{text-align:center;font-weight:700;font-size:14px}
+.chance-row{display:flex;justify-content:space-between;font-size:10px;padding:3px 0;border-bottom:1px solid rgba(148,163,184,.1)}
+.chance-row:last-child{border-bottom:none}
 .card-reveal{animation:cardReveal 1s cubic-bezier(.34,1.56,.64,1)}
 @keyframes cardReveal{0%{opacity:0;transform:scale(0) rotate(180deg)}60%{opacity:1;transform:scale(1.2) rotate(-10deg)}100%{transform:scale(1) rotate(0)}}
-.pack-card{background:rgba(30,41,59,.8);border:1px solid rgba(148,163,184,.2);border-radius:20px;padding:20px;margin-bottom:16px;cursor:pointer;transition:all .3s}
-.pack-card:active{transform:scale(.97)}
-.pack-card.common{border-color:rgba(156,163,175,.4)}
-.pack-card.rare{border-color:rgba(59,130,246,.5);box-shadow:0 0 20px rgba(59,130,246,.2)}
-.pack-card.legendary{border-color:rgba(251,191,36,.5);box-shadow:0 0 25px rgba(251,191,36,.3)}
-.pack-icon{font-size:4rem;text-align:center;margin-bottom:12px}
-.pack-title{font-size:18px;font-weight:700;text-align:center;margin-bottom:8px}
-.pack-desc{font-size:13px;opacity:70;text-align:center;margin-bottom:12px}
-.pack-price{text-align:center;font-weight:700;font-size:16px}
-.chance-row{display:flex;justify-content:space-between;font-size:11px;padding:4px 0;border-bottom:1px solid rgba(148,163,184,.1)}
-.chance-row:last-child{border-bottom:none}
+.exp-bar{height:4px;background:rgba(15,23,42,.8);border-radius:999px;overflow:hidden;margin-top:4px}
+.exp-fill{height:100%;background:linear-gradient(90deg,#10b981,#34d399);border-radius:999px}
 </style>
 </head>
 <body>
-<div class="max-w-md mx-auto px-4 pt-4">
+<div class="max-w-md mx-auto px-3 pt-3">
     <div class="profile-header">
         <div class="avatar-ring"><div class="avatar-inner">🐱</div></div>
-        <h2 class="text-xl font-bold text-center" id="username">Гость</h2>
+        <h2 class="text-lg font-bold text-center" id="username">Гость</h2>
         <p class="text-center text-xs opacity-60 mt-1" id="user-title">Игрок</p>
-        <div class="flex justify-center gap-2 mt-4 flex-wrap">
+        <div class="flex justify-center gap-2 mt-3 flex-wrap">
             <div class="balance-chip">🐟 <span id="fish">0</span></div>
             <div class="balance-chip">💎 <span id="tails">0</span></div>
             <div class="balance-chip">🎴 <span id="cards-collected">0</span></div>
@@ -97,8 +98,8 @@ body::before{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%
     </div>
     <div class="progress-wrap">
         <div class="flex justify-between items-center">
-            <span class="text-sm font-bold">📊 Коллекция</span>
-            <span class="text-sm font-bold" id="progress-text">0 / 60</span>
+            <span class="text-xs font-bold">📊 Коллекция</span>
+            <span class="text-xs font-bold" id="progress-text">0/60</span>
         </div>
         <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
     </div>
@@ -110,12 +111,12 @@ body::before{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%
     <div id="tab-collection" class="tab-content">
         <div class="rarity-filters">
             <button class="rarity-chip active" data-r="all">Все</button>
-            <button class="rarity-chip" data-r="common">⚪ Обычные</button>
-            <button class="rarity-chip" data-r="uncommon">🟢 Необычные</button>
-            <button class="rarity-chip" data-r="rare">🔵 Редкие</button>
-            <button class="rarity-chip" data-r="epic">🟣 Эпические</button>
-            <button class="rarity-chip" data-r="legendary">🟡 Легендарные</button>
-            <button class="rarity-chip" data-r="ultra">🔴 Ультра</button>
+            <button class="rarity-chip" data-r="common">⚪</button>
+            <button class="rarity-chip" data-r="uncommon">🟢</button>
+            <button class="rarity-chip" data-r="rare">🔵</button>
+            <button class="rarity-chip" data-r="epic">🟣</button>
+            <button class="rarity-chip" data-r="legendary">🟡</button>
+            <button class="rarity-chip" data-r="ultra">🔴</button>
         </div>
         <div id="cards-container"></div>
     </div>
@@ -123,8 +124,8 @@ body::before{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%
         <div class="pack-card common" onclick="openPack('common')">
             <div class="pack-icon">📦</div>
             <div class="pack-title">Обычный пак</div>
-            <div class="pack-desc">Стандартные шансы на карточки</div>
-            <div class="bg-slate-900/60 rounded-xl p-3 mb-3 text-xs">
+            <div class="pack-desc">Стандартные шансы</div>
+            <div class="bg-slate-900/60 rounded-lg p-2 mb-2 text-xs">
                 <div class="chance-row"><span>⚪ Обычная</span><span>50%</span></div>
                 <div class="chance-row"><span>🟢 Необычная</span><span>28%</span></div>
                 <div class="chance-row"><span>🔵 Редкая</span><span>14%</span></div>
@@ -137,8 +138,8 @@ body::before{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%
         <div class="pack-card rare" onclick="openPack('rare')">
             <div class="pack-icon">💎</div>
             <div class="pack-title">Редкий пак</div>
-            <div class="pack-desc">Повышенные шансы на редкие+</div>
-            <div class="bg-slate-900/60 rounded-xl p-3 mb-3 text-xs">
+            <div class="pack-desc">Повышенные шансы</div>
+            <div class="bg-slate-900/60 rounded-lg p-2 mb-2 text-xs">
                 <div class="chance-row"><span>⚪ Обычная</span><span>20%</span></div>
                 <div class="chance-row"><span>🟢 Необычная</span><span>30%</span></div>
                 <div class="chance-row"><span>🔵 Редкая</span><span>25%</span></div>
@@ -151,8 +152,8 @@ body::before{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%
         <div class="pack-card legendary" onclick="openPack('legendary')">
             <div class="pack-icon">👑</div>
             <div class="pack-title">Легендарный пак</div>
-            <div class="pack-desc">Максимальные шансы на топовые карты</div>
-            <div class="bg-slate-900/60 rounded-xl p-3 mb-3 text-xs">
+            <div class="pack-desc">Максимальные шансы</div>
+            <div class="bg-slate-900/60 rounded-lg p-2 mb-2 text-xs">
                 <div class="chance-row"><span>⚪ Обычная</span><span>5%</span></div>
                 <div class="chance-row"><span>🟢 Необычная</span><span>10%</span></div>
                 <div class="chance-row"><span>🔵 Редкая</span><span>25%</span></div>
@@ -165,16 +166,16 @@ body::before{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%
     </div>
     <div id="tab-events" class="tab-content" style="display:none">
         <div class="profile-header">
-            <div class="text-5xl mb-3 text-center">🎉</div>
-            <h3 class="text-xl font-bold text-center mb-4">Активные ивенты</h3>
+            <div class="text-4xl mb-2 text-center">🎉</div>
+            <h3 class="text-lg font-bold text-center mb-3">Активные ивенты</h3>
             <div id="events-list"></div>
         </div>
     </div>
     <div id="tab-owner" class="tab-content" style="display:none">
         <div class="profile-header">
-            <div class="text-5xl mb-3 text-center">👑</div>
-            <h3 class="text-xl font-bold text-center mb-1">Панель владельца</h3>
-            <p class="text-center text-xs opacity-60 mb-4">Быстрая выдача плюшек</p>
+            <div class="text-4xl mb-2 text-center">👑</div>
+            <h3 class="text-lg font-bold text-center mb-1">Панель владельца</h3>
+            <p class="text-center text-xs opacity-60 mb-3">Быстрая выдача</p>
             <div class="owner-grid">
                 <button class="btn-primary" onclick="showOwnerForm('fish')">🐟 Рыбки</button>
                 <button class="btn-primary" onclick="showOwnerForm('tails')">💎 Хвостики</button>
@@ -189,17 +190,20 @@ body::before{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%
 
 <div id="card-modal" class="modal">
     <div class="modal-content">
-        <div id="modal-card" class="card mx-auto mb-4" style="max-width:220px"></div>
-        <h3 id="modal-name" class="text-xl font-bold text-center mb-1"></h3>
-        <p id="modal-desc" class="text-sm opacity-60 text-center mb-3"></p>
-        <div id="modal-rarity" class="text-center mb-4"></div>
-        <button class="btn-primary" onclick="closeModal()">Закрыть</button>
+        <div id="modal-card" class="card mx-auto mb-3" style="max-width:180px"></div>
+        <h3 id="modal-name" class="text-lg font-bold text-center mb-1"></h3>
+        <p id="modal-desc" class="text-xs opacity-60 text-center mb-2"></p>
+        <div id="modal-rarity" class="text-center mb-2"></div>
+        <div id="modal-level" class="text-center mb-2"></div>
+        <div id="modal-exp" class="mb-3"></div>
+        <button id="upgrade-btn" class="btn-primary" onclick="upgradeCard()">⬆️ Прокачать</button>
+        <button class="btn-primary" style="background:rgba(30,41,59,.8)" onclick="closeModal()">Закрыть</button>
     </div>
 </div>
 
 <div id="owner-modal" class="modal">
     <div class="modal-content">
-        <h3 id="owner-modal-title" class="text-xl font-bold text-center mb-4"></h3>
+        <h3 id="owner-modal-title" class="text-lg font-bold text-center mb-3"></h3>
         <div id="owner-form-content"></div>
         <button class="btn-primary" onclick="closeOwnerModal()">Отмена</button>
     </div>
@@ -231,7 +235,7 @@ const vip = params.get('vip') === '1';
 const isOwner = params.get('is_owner') === '1';
 
 document.getElementById('username').innerText = userName;
-document.getElementById('user-title').innerText = vip ? '👑 VIP-игрок' : (isTelegram ? 'Игрок' : 'Демо');
+document.getElementById('user-title').innerText = vip ? '👑 VIP' : (isTelegram ? 'Игрок' : 'Демо');
 document.getElementById('fish').innerText = fishBal;
 document.getElementById('tails').innerText = tailsBal;
 
@@ -251,113 +255,28 @@ if (isOwner) {
 }
 
 const ALL_CARDS = [
-    {id:"c01",name:"🐱 Кот-неко",r:"common",e:"🐱",d:"Милый котик с ушками"},
-    {id:"c02",name:"🐶 Пёс-ину",r:"common",e:"🐶",d:"Верный друг с хвостиком"},
-    {id:"c03",name:"🦊 Лисёнок",r:"common",e:"🦊",d:"Хитрый и пушистый"},
-    {id:"c04",name:"🐰 Зайка",r:"common",e:"🐰",d:"Длинные ушки"},
-    {id:"c05",name:"🐻 Мишка",r:"common",e:"🐻",d:"Большой и добрый"},
-    {id:"c06",name:"🐼 Панда",r:"common",e:"🐼",d:"Чёрно-белый пушистик"},
-    {id:"c07",name:"🐨 Коала",r:"common",e:"🐨",d:"Спит на эвкалипте"},
-    {id:"c08",name:"🦝 Енотик",r:"common",e:"🦝",d:"Маска на мордочке"},
-    {id:"c09",name:"🐿️ Белочка",r:"common",e:"🐿️",d:"Пушистый хвост"},
-    {id:"c10",name:"🦔 Ёжик",r:"common",e:"🦔",d:"Колючий, но милый"},
-    {id:"c11",name:"🐭 Мышка",r:"common",e:"🐭",d:"Маленькая и быстрая"},
-    {id:"c12",name:"🐹 Хомячок",r:"common",e:"🐹",d:"Щёчки набиты"},
-    {id:"c13",name:"🐸 Лягушонок",r:"common",e:"🐸",d:"Ква-ква!"},
-    {id:"c14",name:"🦎 Ящерка",r:"common",e:"🦎",d:"Быстрая и ловкая"},
-    {id:"c15",name:"🐢 Черепашка",r:"common",e:"🐢",d:"Мудрая и неторопливая"},
-    {id:"c16",name:"🐔 Курочка",r:"common",e:"🐔",d:"Ко-ко-ко!"},
-    {id:"c17",name:"🐧 Пингвин",r:"common",e:"🐧",d:"Смокинг от природы"},
-    {id:"c18",name:"🦆 Уточка",r:"common",e:"🦆",d:"Кря-кря!"},
-    {id:"c19",name:"🦉 Совёнок",r:"common",e:"🦉",d:"Мудрый ночной житель"},
-    {id:"c20",name:"🐦 Птичка",r:"common",e:"🐦",d:"Летает и поёт"},
-    {id:"c21",name:"🦅 Орлёнок",r:"common",e:"🦅",d:"Гордый взгляд"},
-    {id:"c22",name:"🦢 Лебёдушка",r:"common",e:"🦢",d:"Грация и красота"},
-    {id:"c23",name:"🐴 Лошадка",r:"common",e:"🐴",d:"Быстрая и сильная"},
-    {id:"c24",name:"🐮 Коровка",r:"common",e:"🐮",d:"Мууу!"},
-    {id:"c25",name:"🐷 Поросёнок",r:"common",e:"🐷",d:"Розовый и весёлый"},
-    {id:"c26",name:"🐑 Овечка",r:"common",e:"🐑",d:"Мягкая и пушистая"},
-    {id:"c27",name:"🐐 Козлик",r:"common",e:"🐐",d:"Бегает по горам"},
-    {id:"c28",name:"🦌 Оленёнок",r:"common",e:"🦌",d:"Маленькие рожки"},
-    {id:"c29",name:"🐿️ Суслик",r:"common",e:"🐿️",d:"Стоит столбиком"},
-    {id:"c30",name:"🦦 Выдра",r:"common",e:"🦦",d:"Любит плавать"},
-    {id:"u01",name:"🐺 Волк",r:"uncommon",e:"🐺",d:"Воет на луну"},
-    {id:"u02",name:"🦊 Кицунэ",r:"uncommon",e:"🦊",d:"Девятихвостая лиса"},
-    {id:"u03",name:"🐈‍⬛ Чёрный кот",r:"uncommon",e:"🐈‍⬛",d:"Мистический спутник"},
-    {id:"u04",name:"🐕 Хаски",r:"uncommon",e:"🐕",d:"Голубые глаза и вой"},
-    {id:"u05",name:"🦝 Енот-полоскун",r:"uncommon",e:"🦝",d:"Мастер хитрости"},
-    {id:"u06",name:"🐊 Крокодил",r:"uncommon",e:"🐊",d:"Острые зубы"},
-    {id:"u07",name:"🦈 Акула",r:"uncommon",e:"🦈",d:"Хозяйка океана"},
-    {id:"u08",name:"🐙 Осьминожка",r:"uncommon",e:"🐙",d:"Восемь щупалец"},
-    {id:"u09",name:"🦂 Скорпион",r:"uncommon",e:"🦂",d:"Ядовитый хвост"},
-    {id:"u10",name:"🦇 Летучая мышь",r:"uncommon",e:"🦇",d:"Ночной охотник"},
-    {id:"u11",name:"🐍 Змейка",r:"uncommon",e:"🐍",d:"Ловкая и гибкая"},
-    {id:"u12",name:"🦎 Хамелеон",r:"uncommon",e:"🦎",d:"Меняет цвет"},
-    {id:"u13",name:"🦅 Гарпия",r:"uncommon",e:"🦅",d:"Крылатый воин"},
-    {id:"u14",name:"🐦 Феникс-птенец",r:"uncommon",e:"🐦",d:"Юный огненный"},
-    {id:"u15",name:"🦉 Филин",r:"uncommon",e:"🦉",d:"Знает всё"},
-    {id:"u16",name:"🐺 Стая волков",r:"uncommon",e:"🐺",d:"Вместе сила"},
-    {id:"u17",name:"🦊 Тануки",r:"uncommon",e:"🦊",d:"Оборотень из мифов"},
-    {id:"r01",name:"🦄 Единорог",r:"rare",e:"🦄",d:"Магическое существо"},
-    {id:"r02",name:"🐉 Дракончик",r:"rare",e:"🐉",d:"Маленький, но грозный"},
-    {id:"r03",name:"🧚 Фея-лисичка",r:"rare",e:"🧚",d:"Волшебная помощница"},
-    {id:"r04",name:"🧜 Русалка-кошка",r:"rare",e:"🧜",d:"Повелительница морей"},
-    {id:"r05",name:"🦚 Павлин",r:"rare",e:"🦚",d:"Яркое оперение"},
-    {id:"r06",name:"🦜 Попугай-воин",r:"rare",e:"🦜",d:"Разговорчивый друг"},
-    {id:"r07",name:"🐠 Рыбка-нимфа",r:"rare",e:"🐠",d:"Разноцветная красавица"},
-    {id:"r08",name:"🦩 Фламинго",r:"rare",e:"🦩",d:"Элегантная поза"},
-    {id:"e01",name:"🐲 Древний дракон",r:"epic",e:"🐲",d:"Дышит огнём"},
-    {id:"e02",name:"🦊 Великая кицунэ",r:"epic",e:"🦊",d:"Великая лиса"},
-    {id:"e03",name:"🐺 Альфа-оборотень",r:"epic",e:"🐺",d:"Вожак стаи"},
-    {id:"e04",name:"🦄 Аликорн",r:"epic",e:"🦄",d:"Крылатый единорог"},
-    {id:"e05",name:"🐉 Восточный дракон",r:"epic",e:"🐉",d:"Мудрость веков"},
-    {id:"e06",name:"🦅 Феникс",r:"epic",e:"🦅",d:"Из пепла"},
-    {id:"e07",name:"🧚 Королева фей",r:"epic",e:"🧚",d:"Повелительница леса"},
-    {id:"l01",name:"🦁 Король-лев",r:"legendary",e:"🦁",d:"Правитель саванны"},
-    {id:"l02",name:"🐉 Император драконов",r:"legendary",e:"🐉",d:"Властелин стихий"},
-    {id:"l03",name:"🦊 Богиня-кицунэ",r:"legendary",e:"🦊",d:"Древнее божество"},
-    {id:"l04",name:"🦄 Золотой аликорн",r:"legendary",e:"🦄",d:"Сияние небес"},
+    {id:"c01",name:"🐱 Кот-неко",r:"common",e:"🐱",d:"Милый котик"},{id:"c02",name:"🐶 Пёс-ину",r:"common",e:"🐶",d:"Верный друг"},{id:"c03",name:"🦊 Лисёнок",r:"common",e:"🦊",d:"Хитрый и пушистый"},{id:"c04",name:"🐰 Зайка",r:"common",e:"🐰",d:"Длинные ушки"},{id:"c05",name:"🐻 Мишка",r:"common",e:"🐻",d:"Большой и добрый"},{id:"c06",name:"🐼 Панда",r:"common",e:"🐼",d:"Чёрно-белый"},{id:"c07",name:"🐨 Коала",r:"common",e:"🐨",d:"Спит на эвкалипте"},{id:"c08",name:"🦝 Енотик",r:"common",e:"🦝",d:"Маска на мордочке"},{id:"c09",name:"🐿️ Белочка",r:"common",e:"🐿️",d:"Пушистый хвост"},{id:"c10",name:"🦔 Ёжик",r:"common",e:"🦔",d:"Колючий, но милый"},{id:"c11",name:"🐭 Мышка",r:"common",e:"🐭",d:"Маленькая и быстрая"},{id:"c12",name:"🐹 Хомячок",r:"common",e:"🐹",d:"Щёчки набиты"},{id:"c13",name:"🐸 Лягушонок",r:"common",e:"🐸",d:"Ква-ква!"},{id:"c14",name:"🦎 Ящерка",r:"common",e:"🦎",d:"Быстрая и ловкая"},{id:"c15",name:"🐢 Черепашка",r:"common",e:"🐢",d:"Мудрая"},{id:"c16",name:"🐔 Курочка",r:"common",e:"🐔",d:"Ко-ко-ко!"},{id:"c17",name:"🐧 Пингвин",r:"common",e:"🐧",d:"Смокинг"},{id:"c18",name:"🦆 Уточка",r:"common",e:"🦆",d:"Кря-кря!"},{id:"c19",name:"🦉 Совёнок",r:"common",e:"🦉",d:"Ночной житель"},{id:"c20",name:"🐦 Птичка",r:"common",e:"🐦",d:"Летает и поёт"},{id:"c21",name:"🦅 Орлёнок",r:"common",e:"🦅",d:"Гордый взгляд"},{id:"c22",name:"🦢 Лебёдушка",r:"common",e:"🦢",d:"Грация"},{id:"c23",name:"🐴 Лошадка",r:"common",e:"🐴",d:"Быстрая"},{id:"c24",name:"🐮 Коровка",r:"common",e:"🐮",d:"Мууу!"},{id:"c25",name:"🐷 Поросёнок",r:"common",e:"🐷",d:"Розовый"},{id:"c26",name:"🐑 Овечка",r:"common",e:"🐑",d:"Мягкая"},{id:"c27",name:"🐐 Козлик",r:"common",e:"🐐",d:"По горам"},{id:"c28",name:"🦌 Оленёнок",r:"common",e:"🦌",d:"Маленькие рожки"},{id:"c29",name:"🐿️ Суслик",r:"common",e:"🐿️",d:"Столбиком"},{id:"c30",name:"🦦 Выдра",r:"common",e:"🦦",d:"Любит плавать"},
+    {id:"u01",name:"🐺 Волк",r:"uncommon",e:"🐺",d:"Воет на луну"},{id:"u02",name:"🦊 Кицунэ",r:"uncommon",e:"🦊",d:"Девятихвостая"},{id:"u03",name:"🐈‍⬛ Чёрный кот",r:"uncommon",e:"🐈‍⬛",d:"Мистический"},{id:"u04",name:"🐕 Хаски",r:"uncommon",e:"🐕",d:"Голубые глаза"},{id:"u05",name:"🦝 Енот-полоскун",r:"uncommon",e:"🦝",d:"Мастер хитрости"},{id:"u06",name:"🐊 Крокодил",r:"uncommon",e:"🐊",d:"Острые зубы"},{id:"u07",name:"🦈 Акула",r:"uncommon",e:"🦈",d:"Хозяйка океана"},{id:"u08",name:"🐙 Осьминожка",r:"uncommon",e:"🐙",d:"Восемь щупалец"},{id:"u09",name:"🦂 Скорпион",r:"uncommon",e:"🦂",d:"Ядовитый хвост"},{id:"u10",name:"🦇 Летучая мышь",r:"uncommon",e:"🦇",d:"Ночной охотник"},{id:"u11",name:"🐍 Змейка",r:"uncommon",e:"🐍",d:"Ловкая"},{id:"u12",name:"🦎 Хамелеон",r:"uncommon",e:"🦎",d:"Меняет цвет"},{id:"u13",name:"🦅 Гарпия",r:"uncommon",e:"🦅",d:"Крылатый воин"},{id:"u14",name:"🐦 Феникс-птенец",r:"uncommon",e:"🐦",d:"Юный огненный"},{id:"u15",name:"🦉 Филин",r:"uncommon",e:"🦉",d:"Знает всё"},{id:"u16",name:"🐺 Стая волков",r:"uncommon",e:"🐺",d:"Вместе сила"},{id:"u17",name:"🦊 Тануки",r:"uncommon",e:"🦊",d:"Оборотень"},
+    {id:"r01",name:"🦄 Единорог",r:"rare",e:"🦄",d:"Магическое"},{id:"r02",name:"🐉 Дракончик",r:"rare",e:"🐉",d:"Маленький, но грозный"},{id:"r03",name:"🧚 Фея-лисичка",r:"rare",e:"🧚",d:"Волшебная"},{id:"r04",name:"🧜 Русалка-кошка",r:"rare",e:"🧜",d:"Повелительница морей"},{id:"r05",name:"🦚 Павлин",r:"rare",e:"🦚",d:"Яркое оперение"},{id:"r06",name:"🦜 Попугай-воин",r:"rare",e:"🦜",d:"Разговорчивый"},{id:"r07",name:"🐠 Рыбка-нимфа",r:"rare",e:"🐠",d:"Разноцветная"},{id:"r08",name:"🦩 Фламинго",r:"rare",e:"🦩",d:"Элегантная"},
+    {id:"e01",name:"🐲 Древний дракон",r:"epic",e:"🐲",d:"Дышит огнём"},{id:"e02",name:"🦊 Великая кицунэ",r:"epic",e:"🦊",d:"Великая лиса"},{id:"e03",name:"🐺 Альфа-оборотень",r:"epic",e:"🐺",d:"Вожак стаи"},{id:"e04",name:"🦄 Аликорн",r:"epic",e:"🦄",d:"Крылатый единорог"},{id:"e05",name:"🐉 Восточный дракон",r:"epic",e:"🐉",d:"Мудрость веков"},{id:"e06",name:"🦅 Феникс",r:"epic",e:"🦅",d:"Из пепла"},{id:"e07",name:"🧚 Королева фей",r:"epic",e:"🧚",d:"Повелительница леса"},
+    {id:"l01",name:"🦁 Король-лев",r:"legendary",e:"🦁",d:"Правитель саванны"},{id:"l02",name:"🐉 Император драконов",r:"legendary",e:"🐉",d:"Властелин стихий"},{id:"l03",name:"🦊 Богиня-кицунэ",r:"legendary",e:"🦊",d:"Древнее божество"},{id:"l04",name:"🦄 Золотой аликорн",r:"legendary",e:"🦄",d:"Сияние небес"},
     {id:"ultra01",name:"✨ Космо-фурри",r:"ultra",e:"🌌",d:"Из другой галактики"}
 ];
 
-const RARITY_INFO = {
-    common:    {name:"Обычная",     emoji:"⚪"},
-    uncommon:  {name:"Необычная",   emoji:"🟢"},
-    rare:      {name:"Редкая",      emoji:"🔵"},
-    epic:      {name:"Эпическая",   emoji:"🟣"},
-    legendary: {name:"Легендарная", emoji:"🟡"},
-    ultra:     {name:"Ультра",      emoji:"🔴"}
-};
-
 const RARITY_LABEL = {common:"⚪ Обычная",uncommon:"🟢 Необычная",rare:"🔵 Редкая",epic:"🟣 Эпическая",legendary:"🟡 Легендарная",ultra:"🔴 Ультра"};
-
-const PACK_TIERS = {
-    common: {
-        name: "Обычный",
-        price: 100,
-        chances: {common:50, uncommon:28, rare:14, epic:5.5, legendary:2, ultra:0.5}
-    },
-    rare: {
-        name: "Редкий",
-        price: 300,
-        chances: {common:20, uncommon:30, rare:25, epic:15, legendary:7, ultra:3}
-    },
-    legendary: {
-        name: "Легендарный",
-        price: 1000,
-        chances: {common:5, uncommon:10, rare:25, epic:30, legendary:20, ultra:10}
-    }
-};
+const LEVEL_COSTS = {common:[100,200,400,800,1500,3000,6000,12000,24000,50000],uncommon:[200,400,800,1600,3000,6000,12000,24000,50000,100000],rare:[500,1000,2000,4000,8000,16000,32000,64000,128000,256000],epic:[1000,2000,4000,8000,16000,32000,64000,128000,256000,512000],legendary:[2000,4000,8000,16000,32000,64000,128000,256000,512000,1024000],ultra:[5000,10000,20000,40000,80000,160000,320000,640000,1280000,2560000]};
+const CARD_VALUES = {common:10,uncommon:25,rare:50,epic:100,legendary:250,ultra:500};
+const DUPLICATE_EXP = {common:50,uncommon:100,rare:250,epic:500,legendary:1000,ultra:2500};
 
 let owned = {};
 try { owned = JSON.parse(params.get('cards') || '{}'); } catch(e) { owned = {}; }
 if (!isTelegram && Object.keys(owned).length === 0) {
-    owned = {c01:3, c03:1, c07:2, u01:1, r01:2, e01:1, l01:1};
+    owned = {c01:{count:3,level:2,exp:100},c03:{count:1,level:1,exp:0},r01:{count:2,level:3,exp:500},l01:{count:1,level:1,exp:0}};
 }
 
 const collectedCount = Object.keys(owned).length;
 document.getElementById('cards-collected').innerText = collectedCount;
-document.getElementById('progress-text').innerText = collectedCount + ' / 60';
+document.getElementById('progress-text').innerText = collectedCount + '/60';
 setTimeout(function() { document.getElementById('progress-fill').style.width = (collectedCount/60*100) + '%'; }, 300);
 
 let events = [];
@@ -366,19 +285,19 @@ try { events = JSON.parse(params.get('events') || '[]'); } catch(e) { events = [
 function renderEvents() {
     const container = document.getElementById('events-list');
     if (events.length === 0) {
-        container.innerHTML = '<div class="text-center opacity-60 py-8">🎉 Сейчас нет активных ивентов.<br>Загляни позже!</div>';
+        container.innerHTML = '<div class="text-center opacity-60 py-6 text-sm">🎉 Нет активных ивентов</div>';
         return;
     }
     container.innerHTML = events.map(function(ev) {
-        return '<div class="event-card"><div class="font-bold text-lg mb-1">' + ev.title + '</div>' +
-            (ev.description ? '<div class="text-sm opacity-80 mb-2">' + ev.description + '</div>' : '') +
-            (ev.end_date ? '<div class="text-xs opacity-60">📅 До: ' + ev.end_date + '</div>' : '') +
-            '</div>';
+        return '<div class="event-card"><div class="font-bold text-base mb-1">' + ev.title + '</div>' +
+            (ev.description ? '<div class="text-xs opacity-80 mb-1">' + ev.description + '</div>' : '') +
+            (ev.end_date ? '<div class="text-xs opacity-60">📅 До: ' + ev.end_date + '</div>' : '') + '</div>';
     }).join('');
 }
 renderEvents();
 
 let currentFilter = 'all';
+let selectedCardId = null;
 
 function renderCards() {
     const container = document.getElementById('cards-container');
@@ -398,32 +317,78 @@ function renderCards() {
         container.appendChild(title);
         const grid = document.createElement('div');
         grid.className = 'cards-grid';
-        groups[r].forEach(function(card, i) {
-            const count = owned[card.id] || 0;
+        groups[r].forEach(function(card) {
+            const data = owned[card.id];
+            const count = data ? data.count : 0;
+            const level = data ? data.level : 1;
+            const exp = data ? data.exp : 0;
             const el = document.createElement('div');
             el.className = 'card r-' + card.r + (count === 0 ? ' locked' : '');
-            el.innerHTML = (count > 0 ? '<div class="card-count">×' + count + '</div>' : '') +
+            el.innerHTML = (count > 0 ? '<div class="card-level">Lv.' + level + '</div><div class="card-exp">✨' + exp + '</div>' : '') +
                 '<div class="card-bg">' + (count > 0 ? card.e : '❓') + '</div>' +
                 '<div class="card-info"><div class="card-name">' + (count > 0 ? card.name.replace(/^[^\s]+\s/, '') : '???') + '</div></div>';
-            el.onclick = function() { showCardModal(card, count); };
+            el.onclick = function() { showCardModal(card, data); };
             grid.appendChild(el);
         });
         container.appendChild(grid);
     });
     if (!anyShown) {
-        container.innerHTML = '<div style="text-align:center;padding:40px;color:#64748b">Нет карточек этой редкости</div>';
+        container.innerHTML = '<div style="text-align:center;padding:30px;color:#64748b;font-size:13px">Нет карточек</div>';
     }
 }
 
-function showCardModal(card, count) {
+function showCardModal(card, data) {
+    selectedCardId = card.id;
     const mc = document.getElementById('modal-card');
+    const count = data ? data.count : 0;
+    const level = data ? data.level : 1;
+    const exp = data ? data.exp : 0;
     mc.className = 'card r-' + card.r + (count === 0 ? ' locked' : '');
     mc.innerHTML = '<div class="card-bg">' + (count > 0 ? card.e : '❓') + '</div>';
     document.getElementById('modal-name').innerText = count > 0 ? card.name : '???';
-    document.getElementById('modal-desc').innerText = count > 0 ? card.d : 'Эта карточка ещё не найдена';
-    document.getElementById('modal-rarity').innerHTML = '<span class="balance-chip">' + RARITY_LABEL[card.r] + ' • У вас: ' + count + ' шт.</span>';
+    document.getElementById('modal-desc').innerText = count > 0 ? card.d : 'Не найдена';
+    document.getElementById('modal-rarity').innerHTML = '<span class="balance-chip">' + RARITY_LABEL[card.r] + '</span>';
+    const value = CARD_VALUES[card.r] * level;
+    document.getElementById('modal-level').innerHTML = '<div class="balance-chip">⭐ Уровень ' + level + ' | 💰 Ценность: ' + value + ' 🐟</div>';
+    if (count > 0 && level < 10) {
+        const nextCost = LEVEL_COSTS[card.r][level - 1];
+        const expPercent = Math.min(100, (exp / nextCost) * 100);
+        document.getElementById('modal-exp').innerHTML = '<div class="text-xs opacity-70 mb-1">Опыт: ' + exp + ' / ' + nextCost + '</div><div class="exp-bar"><div class="exp-fill" style="width:' + expPercent + '%"></div></div>';
+        document.getElementById('upgrade-btn').style.display = 'block';
+        document.getElementById('upgrade-btn').innerText = '⬆️ Прокачать за ' + nextCost + ' 🐟';
+    } else if (level >= 10) {
+        document.getElementById('modal-exp').innerHTML = '<div class="text-xs text-green-400">✅ Максимальный уровень!</div>';
+        document.getElementById('upgrade-btn').style.display = 'none';
+    } else {
+        document.getElementById('modal-exp').innerHTML = '';
+        document.getElementById('upgrade-btn').style.display = 'none';
+    }
     document.getElementById('card-modal').classList.add('active');
 }
+
+function upgradeCard() {
+    if (!selectedCardId) return;
+    const data = owned[selectedCardId];
+    if (!data || data.level >= 10) return;
+    const cost = LEVEL_COSTS[CARDS[selectedCardId].r][data.level - 1];
+    if (fishBal < cost) {
+        showToast('❌ Нужно ' + cost + ' 🐟');
+        return;
+    }
+    if (isTelegram) {
+        tg.sendData(JSON.stringify({action: 'upgrade_card', card_id: selectedCardId}));
+        data.level++;
+        data.exp = 0;
+        fishBal -= cost;
+        document.getElementById('fish').innerText = fishBal;
+        showCardModal(CARDS[selectedCardId], data);
+        renderCards();
+        showToast('✅ Карточка прокачана!');
+    } else {
+        showToast('Работает только в Telegram!');
+    }
+}
+
 function closeModal() { document.getElementById('card-modal').classList.remove('active'); }
 document.getElementById('card-modal').addEventListener('click', function(e) { if (e.target.id === 'card-modal') closeModal(); });
 
@@ -446,50 +411,62 @@ document.querySelectorAll('.rarity-chip').forEach(function(chip) {
 });
 
 function rollCard(tier) {
-    const chances = PACK_TIERS[tier].chances;
+    const chances = {common:{common:50,uncommon:28,rare:14,epic:5.5,legendary:2,ultra:0.5},rare:{common:20,uncommon:30,rare:25,epic:15,legendary:7,ultra:3},legendary:{common:5,uncommon:10,rare:25,epic:30,legendary:20,ultra:10}}[tier];
     const roll = Math.random() * 100;
     let cumulative = 0;
     let selectedRarity = 'common';
     const rarities = ['common','uncommon','rare','epic','legendary','ultra'];
     for (let i = 0; i < rarities.length; i++) {
         cumulative += chances[rarities[i]];
-        if (roll <= cumulative) {
-            selectedRarity = rarities[i];
-            break;
-        }
+        if (roll <= cumulative) { selectedRarity = rarities[i]; break; }
     }
     const cardsOfRarity = ALL_CARDS.filter(function(c) { return c.r === selectedRarity; });
     return cardsOfRarity[Math.floor(Math.random() * cardsOfRarity.length)];
 }
 
 function openPack(tier) {
-    const pack = PACK_TIERS[tier];
-    if (fishBal < pack.price) {
-        showToast('❌ Нужно ' + pack.price + ' 🐟, у тебя ' + fishBal + ' 🐟');
+    const prices = {common:100,rare:300,legendary:1000};
+    const names = {common:'Обычный',rare:'Редкий',legendary:'Легендарный'};
+    const price = prices[tier];
+    if (fishBal < price) {
+        showToast('❌ Нужно ' + price + ' 🐟');
         return;
     }
     const anim = document.getElementById('pack-anim');
     const content = document.getElementById('pack-content');
-    content.innerHTML = '<div class="pack-box">📦</div><p class="mt-4 text-lg font-bold">Открываем...</p>';
+    content.innerHTML = '<div class="pack-box">📦</div><p class="mt-3 text-base font-bold">Открываем...</p>';
     anim.classList.add('active');
     setTimeout(function() {
-        content.innerHTML = '<div class="pack-box" style="animation:none">✨</div><p class="mt-4 text-lg font-bold">Та-дам!</p>';
+        content.innerHTML = '<div class="pack-box" style="animation:none">✨</div><p class="mt-3 text-base font-bold">Та-дам!</p>';
     }, 1800);
     setTimeout(function() {
         const card = rollCard(tier);
-        content.innerHTML = '<div class="card r-' + card.r + ' card-reveal" style="max-width:220px;margin:0 auto"><div class="card-bg">' + card.e + '</div></div>' +
-            '<h3 class="text-xl font-bold mt-4 mb-1">' + card.name + '</h3>' +
-            '<p class="text-sm opacity-60 mb-2">' + card.d + '</p>' +
-            '<div class="balance-chip">' + RARITY_LABEL[card.r] + '</div>';
+        const data = owned[card.id];
+        const isDup = !!data;
+        const expGain = DUPLICATE_EXP[card.r];
+        content.innerHTML = '<div class="card r-' + card.r + ' card-reveal" style="max-width:180px;margin:0 auto"><div class="card-bg">' + card.e + '</div></div>' +
+            '<h3 class="text-lg font-bold mt-3 mb-1">' + card.name + '</h3>' +
+            '<p class="text-xs opacity-60 mb-2">' + card.d + '</p>' +
+            '<div class="balance-chip">' + RARITY_LABEL[card.r] + '</div>' +
+            (isDup ? '<div class="text-xs text-green-400 mt-2">🔄 Повторка! +' + expGain + ' опыта</div>' : '<div class="text-xs text-blue-400 mt-2">✨ Новая карточка!</div>');
         if (isTelegram) {
             tg.sendData(JSON.stringify({action: 'confirm_open_pack', tier: tier, card_id: card.id}));
         }
         setTimeout(function() {
             anim.classList.remove('active');
-            owned[card.id] = (owned[card.id] || 0) + 1;
+            if (isDup) {
+                owned[card.id].count++;
+                owned[card.id].exp += expGain;
+                while (owned[card.id].level < 10 && owned[card.id].exp >= LEVEL_COSTS[card.r][owned[card.id].level - 1]) {
+                    owned[card.id].exp -= LEVEL_COSTS[card.r][owned[card.id].level - 1];
+                    owned[card.id].level++;
+                }
+            } else {
+                owned[card.id] = {count:1,level:1,exp:0};
+            }
             const newCount = Object.keys(owned).length;
             document.getElementById('cards-collected').innerText = newCount;
-            document.getElementById('progress-text').innerText = newCount + ' / 60';
+            document.getElementById('progress-text').innerText = newCount + '/60';
             document.getElementById('progress-fill').style.width = (newCount/60*100) + '%';
             renderCards();
             showToast('✅ Карточка получена!');
@@ -509,13 +486,13 @@ function showOwnerForm(type) {
         content.innerHTML = '<input class="input-field" id="of-target" placeholder="@username или ID"><input class="input-field" id="of-amount" type="number" placeholder="Количество" min="1"><button class="btn-primary" onclick="submitOwnerForm(\'tails\')">Выдать</button>';
     } else if (type === 'vip') {
         title.innerText = '👑 Выдать VIP';
-        content.innerHTML = '<input class="input-field" id="of-target" placeholder="@username или ID"><input class="input-field" id="of-amount" type="number" placeholder="Срок в месяцах (0 = навсегда)" min="0"><button class="btn-gold" onclick="submitOwnerForm(\'vip\')">Выдать VIP</button>';
+        content.innerHTML = '<input class="input-field" id="of-target" placeholder="@username или ID"><input class="input-field" id="of-amount" type="number" placeholder="Срок (0 = навсегда)" min="0"><button class="btn-gold" onclick="submitOwnerForm(\'vip\')">Выдать VIP</button>';
     } else if (type === 'remove_vip') {
         title.innerText = '❌ Забрать VIP';
         content.innerHTML = '<input class="input-field" id="of-target" placeholder="@username или ID"><button class="btn-danger" onclick="submitOwnerForm(\'remove_vip\')">Забрать VIP</button>';
     } else if (type === 'add_event') {
         title.innerText = '🎉 Добавить ивент';
-        content.innerHTML = '<input class="input-field" id="of-title" placeholder="Название ивента"><input class="input-field" id="of-desc" placeholder="Описание"><input class="input-field" id="of-end" placeholder="Дата окончания"><button class="btn-primary" onclick="submitOwnerForm(\'add_event\')">Добавить</button>';
+        content.innerHTML = '<input class="input-field" id="of-title" placeholder="Название"><input class="input-field" id="of-desc" placeholder="Описание"><input class="input-field" id="of-end" placeholder="Дата окончания"><button class="btn-primary" onclick="submitOwnerForm(\'add_event\')">Добавить</button>';
     } else if (type === 'remove_event') {
         title.innerText = '🗑 Удалить ивент';
         content.innerHTML = '<input class="input-field" id="of-event-id" type="number" placeholder="ID ивента"><button class="btn-danger" onclick="submitOwnerForm(\'remove_event\')">Удалить</button>';
@@ -553,7 +530,6 @@ function submitOwnerForm(type) {
     }
 }
 
-// Прокрутка вкладок мышкой
 const tabsContainer = document.getElementById('tabs-container');
 if (tabsContainer) {
     tabsContainer.addEventListener('wheel', function(e) {
