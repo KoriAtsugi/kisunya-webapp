@@ -16,10 +16,10 @@ body::before{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%
 .avatar-ring{width:110px;height:110px;border-radius:50%;padding:4px;background:conic-gradient(from 0deg,#8b5cf6,#3b82f6,#ec4899,#8b5cf6);animation:spin 8s linear infinite;margin:0 auto 12px}
 @keyframes spin{to{transform:rotate(360deg)}}
 .avatar-inner{width:100%;height:100%;border-radius:50%;background:#1e293b;display:flex;align-items:center;justify-content:center;font-size:3.5rem;animation:spin 8s linear infinite reverse}
-.balance-chip{background:rgba(30,41,59,.8);border:1px solid rgba(148,163,184,.2);border-radius:999px;padding:8px 14px;font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:6px;transition:all .3s}
+.balance-chip{background:rgba(30,41,59,.8);border:1px solid rgba(148,163,184,.2);border-radius:999px;padding:8px 14px;font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:6px}
 .progress-wrap{background:rgba(30,41,59,.6);border-radius:16px;padding:16px;margin-bottom:20px;border:1px solid rgba(148,163,184,.1)}
 .progress-bar{height:10px;background:rgba(15,23,42,.8);border-radius:999px;overflow:hidden;margin-top:10px}
-.progress-fill{height:100%;background:linear-gradient(90deg,#8b5cf6,#3b82f6,#06b6d4);border-radius:999px;transition:width 1.5s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,#8b5cf6,#3b82f6,#06b6d4);border-radius:999px;transition:width 1.5s;position:relative;overflow:hidden}
 .progress-fill::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);animation:shimmer 2s infinite}
 @keyframes shimmer{to{transform:translateX(100%)}}
 .tabs{display:flex;gap:8px;margin-bottom:20px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
@@ -38,11 +38,10 @@ body::before{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%
 .rarity-chip[data-r="legendary"].active{background:#d97706;border-color:#fbbf24}
 .rarity-chip[data-r="ultra"].active{background:linear-gradient(90deg,#be123c,#fbbf24);border-color:#f43f5e}
 .cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.card{position:relative;border-radius:16px;aspect-ratio:3/4;overflow:hidden;cursor:pointer;transition:all .3s cubic-bezier(.4,0,.2,1);animation:cardIn .5s ease-out backwards}
+.card{position:relative;border-radius:16px;aspect-ratio:3/4;overflow:hidden;cursor:pointer;transition:all .3s;animation:cardIn .5s ease-out backwards}
 @keyframes cardIn{from{opacity:0;transform:translateY(20px) scale(.9)}to{opacity:1;transform:translateY(0) scale(1)}}
 .card:active{transform:scale(.92)}
-.card-bg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:3.5rem;transition:transform .5s}
-.card:hover .card-bg{transform:scale(1.1) rotate(-5deg)}
+.card-bg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:3.5rem}
 .card-info{position:absolute;bottom:0;left:0;right:0;padding:10px 8px 8px;background:linear-gradient(to top,rgba(0,0,0,.9),transparent);text-align:center}
 .card-name{font-size:11px;font-weight:700;line-height:1.2}
 .card-count{position:absolute;top:6px;left:6px;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);border-radius:999px;padding:2px 8px;font-size:10px;font-weight:700;border:1px solid rgba(255,255,255,.2)}
@@ -69,21 +68,27 @@ body::before{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%
 @keyframes packShake{0%,100%{transform:rotate(0) scale(1)}25%{transform:rotate(-10deg) scale(1.1)}75%{transform:rotate(10deg) scale(1.1)}}
 .btn-primary{background:linear-gradient(135deg,#8b5cf6,#3b82f6);color:#fff;padding:16px 24px;border-radius:16px;font-weight:700;font-size:16px;border:none;cursor:pointer;width:100%;box-shadow:0 8px 24px rgba(139,92,246,.4);transition:all .3s}
 .btn-primary:active{transform:scale(.97)}
+.btn-danger{background:linear-gradient(135deg,#ef4444,#dc2626)}
+.btn-gold{background:linear-gradient(135deg,#fbbf24,#d97706)}
 .section-title{font-size:13px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;margin:20px 0 12px;display:flex;align-items:center;gap:8px}
 .section-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(148,163,184,.3),transparent)}
 .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#8b5cf6,#3b82f6);color:#fff;padding:14px 24px;border-radius:16px;font-weight:600;z-index:300;box-shadow:0 10px 30px rgba(139,92,246,.5);animation:toastIn .4s;pointer-events:none}
 @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+.input-field{width:100%;background:rgba(15,23,42,.8);border:1px solid rgba(148,163,184,.2);border-radius:12px;padding:12px 16px;color:#fff;font-size:14px;margin-bottom:12px;outline:none;transition:border-color .3s}
+.input-field:focus{border-color:#8b5cf6}
+.owner-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.event-card{background:rgba(30,41,59,.8);border:1px solid rgba(139,92,246,.3);border-radius:16px;padding:16px;margin-bottom:12px}
 </style>
 </head>
 <body>
 <div class="max-w-md mx-auto px-4 pt-4">
     <div class="profile-header">
-        <div class="avatar-ring"><div class="avatar-inner" id="avatar">🐱</div></div>
+        <div class="avatar-ring"><div class="avatar-inner">🐱</div></div>
         <h2 class="text-xl font-bold text-center" id="username">Гость</h2>
         <p class="text-center text-xs opacity-60 mt-1" id="user-title">Игрок</p>
         <div class="flex justify-center gap-2 mt-4 flex-wrap">
-            <div class="balance-chip">🐟 <span id="fish">1250</span></div>
-            <div class="balance-chip">💎 <span id="tails">15</span></div>
+            <div class="balance-chip">🐟 <span id="fish">0</span></div>
+            <div class="balance-chip">💎 <span id="tails">0</span></div>
             <div class="balance-chip">🎴 <span id="cards-collected">0</span></div>
         </div>
     </div>
@@ -94,9 +99,10 @@ body::before{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%
         </div>
         <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
     </div>
-    <div class="tabs">
+    <div class="tabs" id="tabs-container">
         <button class="tab-btn active" data-tab="collection">🎴 Коллекция</button>
         <button class="tab-btn" data-tab="pack">📦 Пак</button>
+        <button class="tab-btn" data-tab="events">🎉 Ивенты</button>
         <button class="tab-btn" data-tab="auction">🏛️ Аукцион</button>
     </div>
     <div id="tab-collection" class="tab-content">
@@ -127,19 +133,42 @@ body::before{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%
             <button class="btn-primary" onclick="openPack()">Открыть за 100 🐟</button>
         </div>
     </div>
+    <div id="tab-events" class="tab-content" style="display:none">
+        <div class="profile-header">
+            <div class="text-5xl mb-3 text-center">🎉</div>
+            <h3 class="text-xl font-bold text-center mb-4">Активные ивенты</h3>
+            <div id="events-list"></div>
+        </div>
+    </div>
     <div id="tab-auction" class="tab-content" style="display:none">
         <div class="profile-header text-center">
             <div class="text-7xl mb-3">🏛️</div>
             <h3 class="text-xl font-bold mb-2">Аукцион карточек</h3>
-            <p class="text-sm opacity-70 mb-4">Выставляй и покупай карточки у других игроков</p>
             <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-4 mb-4">
                 <p class="text-yellow-400 font-bold">⚠️ Временно недоступно</p>
                 <p class="text-xs opacity-60 mt-1">Функция в разработке. Скоро появится!</p>
             </div>
-            <button class="btn-primary" style="opacity:.5;cursor:not-allowed" onclick="showToast('Аукцион скоро откроется! 🏛️')">Скоро...</button>
+        </div>
+    </div>
+    <!-- ВКЛАДКА ВЛАДЕЛЬЦА (скрыта по умолчанию) -->
+    <div id="tab-owner" class="tab-content" style="display:none">
+        <div class="profile-header">
+            <div class="text-5xl mb-3 text-center">👑</div>
+            <h3 class="text-xl font-bold text-center mb-1">Панель владельца</h3>
+            <p class="text-center text-xs opacity-60 mb-4">Быстрая выдача плюшек</p>
+            <div class="owner-grid">
+                <button class="btn-primary" onclick="showOwnerForm('fish')">🐟 Рыбки</button>
+                <button class="btn-primary" onclick="showOwnerForm('tails')">💎 Хвостики</button>
+                <button class="btn-gold" onclick="showOwnerForm('vip')">👑 Выдать VIP</button>
+                <button class="btn-danger" onclick="showOwnerForm('remove_vip')">❌ Забрать VIP</button>
+                <button class="btn-primary" onclick="showOwnerForm('add_event')">🎉 Добавить ивент</button>
+                <button class="btn-danger" onclick="showOwnerForm('remove_event')">🗑 Удалить ивент</button>
+            </div>
         </div>
     </div>
 </div>
+
+<!-- Модалка карточки -->
 <div id="card-modal" class="modal">
     <div class="modal-content">
         <div id="modal-card" class="card mx-auto mb-4" style="max-width:220px"></div>
@@ -149,6 +178,17 @@ body::before{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%
         <button class="btn-primary" onclick="closeModal()">Закрыть</button>
     </div>
 </div>
+
+<!-- Модалка владельца -->
+<div id="owner-modal" class="modal">
+    <div class="modal-content">
+        <h3 id="owner-modal-title" class="text-xl font-bold text-center mb-4"></h3>
+        <div id="owner-form-content"></div>
+        <button class="btn-primary mt-2" onclick="closeOwnerModal()">Отмена</button>
+    </div>
+</div>
+
+<!-- Анимация пака -->
 <div id="pack-anim" class="pack-opening">
     <div id="pack-content" class="text-center">
         <div class="pack-box">📦</div>
@@ -157,7 +197,6 @@ body::before{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%
 </div>
 
 <script>
-// === Telegram Web App (с fallback для браузера) ===
 const tg = (window.Telegram && window.Telegram.WebApp) ? window.Telegram.WebApp : null;
 if (tg) { tg.ready(); tg.expand(); }
 
@@ -169,22 +208,36 @@ function showToast(msg) {
     setTimeout(() => t.remove(), 2500);
 }
 
-// === Получаем данные (из URL или Telegram, или демо) ===
 const params = new URLSearchParams(window.location.search);
 const isTelegram = !!tg;
 const user = isTelegram ? tg.initDataUnsafe?.user : null;
-
 const userName = params.get('name') || (user ? user.first_name : 'Гость');
 const fishBal = parseInt(params.get('fish')) || (isTelegram ? 0 : 1250);
 const tailsBal = parseInt(params.get('tails')) || (isTelegram ? 0 : 15);
 const vip = params.get('vip') === '1';
+const isOwner = params.get('is_owner') === '1';
 
 document.getElementById('username').innerText = userName;
 document.getElementById('user-title').innerText = vip ? '👑 VIP-игрок' : (isTelegram ? 'Игрок' : 'Демо-режим');
 document.getElementById('fish').innerText = fishBal;
 document.getElementById('tails').innerText = tailsBal;
 
-// === 60 КАРТОЧЕК ===
+// Показать вкладку владельца только если is_owner
+if (isOwner) {
+    const tabsContainer = document.getElementById('tabs-container');
+    const ownerTab = document.createElement('button');
+    ownerTab.className = 'tab-btn';
+    ownerTab.dataset.tab = 'owner';
+    ownerTab.textContent = '👑 Владелец';
+    ownerTab.onclick = function() {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+        this.classList.add('active');
+        document.getElementById('tab-owner').style.display = 'block';
+    };
+    tabsContainer.appendChild(ownerTab);
+}
+
 const ALL_CARDS = [
     {id:"c01",name:"🐱 Кот-неко",r:"common",e:"🐱",d:"Милый котик с ушками"},
     {id:"c02",name:"🐶 Пёс-ину",r:"common",e:"🐶",d:"Верный друг с хвостиком"},
@@ -257,10 +310,8 @@ const ALL_CARDS = [
 
 const RARITY_LABEL = {common:"⚪ Обычная",uncommon:"🟢 Необычная",rare:"🔵 Редкая",epic:"🟣 Эпическая",legendary:"🟡 Легендарная",ultra:"🔴 Ультра"};
 
-// === Полученные карточки ===
 let owned = {};
 try { owned = JSON.parse(params.get('cards') || '{}'); } catch(e) { owned = {}; }
-// В демо-режиме (браузер) показываем пример коллекции
 if (!isTelegram && Object.keys(owned).length === 0) {
     owned = {c01:3, c03:1, c07:2, u01:1, r01:2, e01:1, l01:1};
 }
@@ -270,7 +321,27 @@ document.getElementById('cards-collected').innerText = collectedCount;
 document.getElementById('progress-text').innerText = `${collectedCount} / 60`;
 setTimeout(() => document.getElementById('progress-fill').style.width = (collectedCount/60*100) + '%', 300);
 
-// === Рендер карточек ===
+// === ИВЕНТЫ ===
+let events = [];
+try { events = JSON.parse(params.get('events') || '[]'); } catch(e) { events = []; }
+
+function renderEvents() {
+    const container = document.getElementById('events-list');
+    if (events.length === 0) {
+        container.innerHTML = '<div class="text-center opacity-60 py-8">🎉 Сейчас нет активных ивентов.<br>Загляни позже!</div>';
+        return;
+    }
+    container.innerHTML = events.map(ev => `
+        <div class="event-card">
+            <div class="font-bold text-lg mb-1">${ev.title}</div>
+            ${ev.description ? `<div class="text-sm opacity-80 mb-2">${ev.description}</div>` : ''}
+            ${ev.end_date ? `<div class="text-xs opacity-60">📅 До: ${ev.end_date}</div>` : ''}
+        </div>
+    `).join('');
+}
+renderEvents();
+
+// === РЕНДЕР КАРТОЧЕК ===
 let currentFilter = 'all';
 
 function renderCards() {
@@ -317,7 +388,6 @@ function renderCards() {
     }
 }
 
-// === Модалка ===
 function showCardModal(card, count) {
     const mc = document.getElementById('modal-card');
     mc.className = `card r-${card.r} ${count === 0 ? 'locked' : ''}`;
@@ -330,7 +400,7 @@ function showCardModal(card, count) {
 function closeModal() { document.getElementById('card-modal').classList.remove('active'); }
 document.getElementById('card-modal').addEventListener('click', (e) => { if (e.target.id === 'card-modal') closeModal(); });
 
-// === Вкладки ===
+// === ВКЛАДКИ ===
 document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -340,7 +410,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     });
 });
 
-// === Фильтры ===
+// === ФИЛЬТРЫ ===
 document.querySelectorAll('.rarity-chip').forEach(chip => {
     chip.addEventListener('click', () => {
         document.querySelectorAll('.rarity-chip').forEach(c => c.classList.remove('active'));
@@ -350,7 +420,7 @@ document.querySelectorAll('.rarity-chip').forEach(chip => {
     });
 });
 
-// === Открытие пака ===
+// === ОТКРЫТИЕ ПАКА ===
 function openPack() {
     const anim = document.getElementById('pack-anim');
     const content = document.getElementById('pack-content');
@@ -367,6 +437,92 @@ function openPack() {
             showToast('Открой через Telegram, чтобы получить карточку! 🐾');
         }
     }, 2600);
+}
+
+// === ФОРМЫ ВЛАДЕЛЬЦА ===
+function showOwnerForm(type) {
+    const modal = document.getElementById('owner-modal');
+    const title = document.getElementById('owner-modal-title');
+    const content = document.getElementById('owner-form-content');
+    
+    if (type === 'fish') {
+        title.innerText = '🐟 Выдать рыбки';
+        content.innerHTML = `
+            <input class="input-field" id="of-target" placeholder="@username или ID пользователя">
+            <input class="input-field" id="of-amount" type="number" placeholder="Количество" min="1">
+            <button class="btn-primary" onclick="submitOwnerForm('fish')">Выдать</button>
+        `;
+    } else if (type === 'tails') {
+        title.innerText = '💎 Выдать хвостики';
+        content.innerHTML = `
+            <input class="input-field" id="of-target" placeholder="@username или ID пользователя">
+            <input class="input-field" id="of-amount" type="number" placeholder="Количество" min="1">
+            <button class="btn-primary" onclick="submitOwnerForm('tails')">Выдать</button>
+        `;
+    } else if (type === 'vip') {
+        title.innerText = '👑 Выдать VIP';
+        content.innerHTML = `
+            <input class="input-field" id="of-target" placeholder="@username или ID пользователя">
+            <input class="input-field" id="of-amount" type="number" placeholder="Срок в месяцах (0 = навсегда)" min="0">
+            <button class="btn-gold" onclick="submitOwnerForm('vip')">Выдать VIP</button>
+        `;
+    } else if (type === 'remove_vip') {
+        title.innerText = '❌ Забрать VIP';
+        content.innerHTML = `
+            <input class="input-field" id="of-target" placeholder="@username или ID пользователя">
+            <button class="btn-danger" onclick="submitOwnerForm('remove_vip')">Забрать VIP</button>
+        `;
+    } else if (type === 'add_event') {
+        title.innerText = '🎉 Добавить ивент';
+        content.innerHTML = `
+            <input class="input-field" id="of-title" placeholder="Название ивента">
+            <input class="input-field" id="of-desc" placeholder="Описание (необязательно)">
+            <input class="input-field" id="of-end" placeholder="Дата окончания (например: 2026-12-31)">
+            <button class="btn-primary" onclick="submitOwnerForm('add_event')">Добавить</button>
+        `;
+    } else if (type === 'remove_event') {
+        title.innerText = '🗑 Удалить ивент';
+        content.innerHTML = `
+            <input class="input-field" id="of-event-id" type="number" placeholder="ID ивента">
+            <button class="btn-danger" onclick="submitOwnerForm('remove_event')">Удалить</button>
+        `;
+    }
+    
+    modal.classList.add('active');
+}
+
+function closeOwnerModal() {
+    document.getElementById('owner-modal').classList.remove('active');
+}
+document.getElementById('owner-modal').addEventListener('click', (e) => { if (e.target.id === 'owner-modal') closeOwnerModal(); });
+
+function submitOwnerForm(type) {
+    const data = { action: 'owner_give', type: type };
+    
+    if (type === 'add_event') {
+        data.action = 'add_event';
+        data.title = document.getElementById('of-title').value.trim();
+        data.description = document.getElementById('of-desc').value.trim();
+        data.end_date = document.getElementById('of-end').value.trim();
+        if (!data.title) { showToast('Введите название!'); return; }
+    } else if (type === 'remove_event') {
+        data.action = 'remove_event';
+        data.event_id = document.getElementById('of-event-id').value.trim();
+        if (!data.event_id) { showToast('Введите ID!'); return; }
+    } else {
+        data.target = document.getElementById('of-target').value.trim();
+        data.amount = document.getElementById('of-amount') ? document.getElementById('of-amount').value : '0';
+        if (!data.target) { showToast('Введите пользователя!'); return; }
+        if (type !== 'remove_vip' && !data.amount) { showToast('Введите количество!'); return; }
+    }
+    
+    if (isTelegram) {
+        tg.sendData(JSON.stringify(data));
+        showToast('✅ Отправлено боту!');
+        closeOwnerModal();
+    } else {
+        showToast('Работает только в Telegram!');
+    }
 }
 
 renderCards();
