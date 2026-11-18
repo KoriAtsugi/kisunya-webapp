@@ -130,7 +130,31 @@ body::before{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%
                 <div class="flex justify-between"><span>🟡 Легендарная</span><span class="opacity-60">2%</span></div>
                 <div class="flex justify-between"><span>🔴 Ультра</span><span class="opacity-60">0.5%</span></div>
             </div>
-            <button class="btn-primary" onclick="openPack()">Открыть за 100 🐟</button>
+            function openPack() {
+    // Проверка баланса
+    if (fishBal < 100) {
+        showToast('❌ Нужно 100 🐟, у тебя ' + fishBal + ' 🐟');
+        return;
+    }
+    
+    const anim = document.getElementById('pack-anim');
+    const content = document.getElementById('pack-content');
+    content.innerHTML = '<div class="pack-box">📦</div><p class="mt-4 text-lg font-bold">Открываем...</p>';
+    anim.classList.add('active');
+    
+    setTimeout(() => {
+        content.innerHTML = '<div class="pack-box" style="animation:none">✨</div><p class="mt-4 text-lg font-bold">Та-дам!</p>';
+    }, 1800);
+    
+    setTimeout(() => {
+        anim.classList.remove('active');
+        if (isTelegram) {
+            tg.sendData(JSON.stringify({action: 'confirm_open_pack'}));
+        } else {
+            showToast('Открой через Telegram, чтобы получить карточку! 🐾');
+        }
+    }, 2600);
+}
         </div>
     </div>
     <div id="tab-events" class="tab-content" style="display:none">
@@ -524,7 +548,44 @@ function submitOwnerForm(type) {
         showToast('Работает только в Telegram!');
     }
 }
+// === ПРОКРУТКА ВКЛАДОК МЫШКОЙ ===
+const tabsContainer = document.getElementById('tabs-container');
+if (tabsContainer) {
+    tabsContainer.addEventListener('wheel', (e) => {
+        if (e.deltaY !== 0) {
+            e.preventDefault();
+            tabsContainer.scrollLeft += e.deltaY;
+        }
+    }, { passive: false });
 
+    let isDown = false, startX, scrollLeft;
+    tabsContainer.addEventListener('mousedown', (e) => {
+        isDown = true;
+        tabsContainer.style.cursor = 'grabbing';
+        startX = e.pageX - tabsContainer.offsetLeft;
+        scrollLeft = tabsContainer.scrollLeft;
+    });
+    tabsContainer.addEventListener('mouseleave', () => { isDown = false; tabsContainer.style.cursor = 'grab'; });
+    tabsContainer.addEventListener('mouseup', () => { isDown = false; tabsContainer.style.cursor = 'grab'; });
+    tabsContainer.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - tabsContainer.offsetLeft;
+        tabsContainer.scrollLeft = scrollLeft - (x - startX) * 2;
+    });
+    tabsContainer.style.cursor = 'grab';
+}
+
+// Прокрутка фильтров редкости
+const rarityFilters = document.querySelector('.rarity-filters');
+if (rarityFilters) {
+    rarityFilters.addEventListener('wheel', (e) => {
+        if (e.deltaY !== 0) {
+            e.preventDefault();
+            rarityFilters.scrollLeft += e.deltaY;
+        }
+    }, { passive: false });
+}
 renderCards();
 </script>
 </body>
