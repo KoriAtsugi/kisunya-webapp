@@ -7,387 +7,101 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-body {
-    background: #0a0e1a;
-    color: #fff;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    padding-bottom: 100px;
-    overflow-x: hidden;
-}
-
-/* Фоновые градиенты */
-body::before {
-    content: '';
-    position: fixed;
-    top: -50%; left: -50%;
-    width: 200%; height: 200%;
-    background: radial-gradient(circle at 20% 30%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 50% 50%, rgba(236, 72, 153, 0.08) 0%, transparent 60%);
-    animation: bgFloat 20s ease-in-out infinite;
-    z-index: -1;
-}
-@keyframes bgFloat {
-    0%, 100% { transform: translate(0, 0) rotate(0deg); }
-    50% { transform: translate(-2%, -2%) rotate(1deg); }
-}
-
-/* Профиль */
-.profile-header {
-    background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(59, 130, 246, 0.1));
-    border: 1px solid rgba(139, 92, 246, 0.3);
-    border-radius: 24px;
-    padding: 24px 20px;
-    margin-bottom: 20px;
-    backdrop-filter: blur(10px);
-    animation: slideDown 0.5s ease-out;
-}
-@keyframes slideDown {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.avatar-ring {
-    width: 110px; height: 110px;
-    border-radius: 50%;
-    padding: 4px;
-    background: conic-gradient(from 0deg, #8b5cf6, #3b82f6, #ec4899, #8b5cf6);
-    animation: spin 8s linear infinite;
-    margin: 0 auto 12px;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-.avatar-inner {
-    width: 100%; height: 100%;
-    border-radius: 50%;
-    background: #1e293b;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 3.5rem;
-    animation: spin 8s linear infinite reverse;
-}
-
-.balance-chip {
-    background: rgba(30, 41, 59, 0.8);
-    border: 1px solid rgba(148, 163, 184, 0.2);
-    border-radius: 999px;
-    padding: 8px 14px;
-    font-size: 14px;
-    font-weight: 600;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    transition: all 0.3s;
-}
-.balance-chip:hover { transform: translateY(-2px); border-color: rgba(139, 92, 246, 0.5); }
-
-/* Прогресс-бар */
-.progress-wrap {
-    background: rgba(30, 41, 59, 0.6);
-    border-radius: 16px;
-    padding: 16px;
-    margin-bottom: 20px;
-    border: 1px solid rgba(148, 163, 184, 0.1);
-}
-.progress-bar {
-    height: 10px;
-    background: rgba(15, 23, 42, 0.8);
-    border-radius: 999px;
-    overflow: hidden;
-    margin-top: 10px;
-}
-.progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #8b5cf6, #3b82f6, #06b6d4);
-    border-radius: 999px;
-    transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    overflow: hidden;
-}
-.progress-fill::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-    animation: shimmer 2s infinite;
-}
-@keyframes shimmer { to { transform: translateX(100%); } }
-
-/* Вкладки */
-.tabs {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 20px;
-    overflow-x: auto;
-    padding-bottom: 4px;
-    scrollbar-width: none;
-}
-.tabs::-webkit-scrollbar { display: none; }
-.tab-btn {
-    padding: 12px 20px;
-    border-radius: 16px;
-    background: rgba(30, 41, 59, 0.8);
-    border: 1px solid rgba(148, 163, 184, 0.15);
-    color: #94a3b8;
-    font-weight: 600;
-    font-size: 14px;
-    white-space: nowrap;
-    transition: all 0.3s;
-    cursor: pointer;
-}
-.tab-btn.active {
-    background: linear-gradient(135deg, #8b5cf6, #3b82f6);
-    color: white;
-    border-color: transparent;
-    box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4);
-    transform: translateY(-2px);
-}
-
-/* Фильтры редкости */
-.rarity-filters {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 16px;
-    overflow-x: auto;
-    padding-bottom: 4px;
-    scrollbar-width: none;
-}
-.rarity-filters::-webkit-scrollbar { display: none; }
-.rarity-chip {
-    padding: 8px 14px;
-    border-radius: 999px;
-    background: rgba(30, 41, 59, 0.8);
-    border: 1px solid rgba(148, 163, 184, 0.15);
-    color: #94a3b8;
-    font-size: 12px;
-    font-weight: 600;
-    white-space: nowrap;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-.rarity-chip.active { color: white; transform: scale(1.05); }
-.rarity-chip[data-r="all"].active { background: linear-gradient(135deg, #6366f1, #8b5cf6); border-color: transparent; }
-.rarity-chip[data-r="common"].active { background: #6b7280; border-color: #9ca3af; }
-.rarity-chip[data-r="uncommon"].active { background: #059669; border-color: #4ade80; }
-.rarity-chip[data-r="rare"].active { background: #2563eb; border-color: #60a5fa; }
-.rarity-chip[data-r="epic"].active { background: #7c3aed; border-color: #c084fc; }
-.rarity-chip[data-r="legendary"].active { background: #d97706; border-color: #fbbf24; }
-.rarity-chip[data-r="ultra"].active { background: linear-gradient(90deg, #be123c, #fbbf24); border-color: #f43f5e; }
-
-/* Сетка карточек */
-.cards-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-}
-.card {
-    position: relative;
-    border-radius: 16px;
-    aspect-ratio: 3/4;
-    overflow: hidden;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    animation: cardIn 0.5s ease-out backwards;
-}
-@keyframes cardIn {
-    from { opacity: 0; transform: translateY(20px) scale(0.9); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
-}
-.card:active { transform: scale(0.92); }
-
-.card-bg {
-    position: absolute; inset: 0;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 3.5rem;
-    transition: transform 0.5s;
-}
-.card:hover .card-bg { transform: scale(1.1) rotate(-5deg); }
-
-.card-info {
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    padding: 10px 8px 8px;
-    background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
-    text-align: center;
-}
-.card-name { font-size: 11px; font-weight: 700; line-height: 1.2; }
-.card-count {
-    position: absolute;
-    top: 6px; left: 6px;
-    background: rgba(0,0,0,0.6);
-    backdrop-filter: blur(4px);
-    border-radius: 999px;
-    padding: 2px 8px;
-    font-size: 10px;
-    font-weight: 700;
-    border: 1px solid rgba(255,255,255,0.2);
-}
-
-/* Редкости */
-.r-common { background: linear-gradient(135deg, #4b5563, #6b7280, #9ca3af); }
-.r-uncommon { background: linear-gradient(135deg, #065f46, #059669, #34d399); }
-.r-rare { background: linear-gradient(135deg, #1e40af, #2563eb, #60a5fa); box-shadow: 0 0 20px rgba(96, 165, 250, 0.5); }
-.r-epic { background: linear-gradient(135deg, #5b21b6, #7c3aed, #a78bfa); box-shadow: 0 0 25px rgba(167, 139, 250, 0.6); }
-.r-legendary { background: linear-gradient(135deg, #92400e, #d97706, #fbbf24); box-shadow: 0 0 30px rgba(251, 191, 36, 0.7); animation: legendaryPulse 2s infinite; }
-.r-ultra { background: linear-gradient(135deg, #881337, #e11d48, #fbbf24, #e11d48); background-size: 300% 300%; animation: ultraShift 3s infinite; box-shadow: 0 0 35px rgba(244, 63, 94, 0.8); }
-
-@keyframes legendaryPulse {
-    0%, 100% { box-shadow: 0 0 30px rgba(251, 191, 36, 0.7); }
-    50% { box-shadow: 0 0 45px rgba(251, 191, 36, 1); }
-}
-@keyframes ultraShift {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-}
-
-.card.locked { filter: grayscale(1) brightness(0.4); opacity: 0.5; }
-.card.locked .card-bg { font-size: 2.5rem; }
-
-/* Частицы для редких */
-.particle {
-    position: absolute;
-    width: 4px; height: 4px;
-    background: white;
-    border-radius: 50%;
-    pointer-events: none;
-    animation: float 3s infinite ease-in-out;
-}
-@keyframes float {
-    0%, 100% { transform: translateY(0) scale(1); opacity: 0.8; }
-    50% { transform: translateY(-15px) scale(1.5); opacity: 0.3; }
-}
-
-/* Модальное окно */
-.modal {
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.85);
-    backdrop-filter: blur(10px);
-    display: none;
-    align-items: center; justify-content: center;
-    z-index: 100;
-    padding: 20px;
-    animation: fadeIn 0.3s;
-}
-.modal.active { display: flex; }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-.modal-content {
-    background: linear-gradient(135deg, #1e293b, #0f172a);
-    border: 1px solid rgba(139, 92, 246, 0.3);
-    border-radius: 24px;
-    padding: 24px;
-    max-width: 340px;
-    width: 100%;
-    animation: modalIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-@keyframes modalIn {
-    from { opacity: 0; transform: scale(0.8) translateY(30px); }
-    to { opacity: 1; transform: scale(1) translateY(0); }
-}
-
-/* Анимация открытия пака */
-.pack-opening {
-    position: fixed; inset: 0;
-    background: radial-gradient(circle, rgba(139,92,246,0.3), rgba(10,14,26,0.95));
-    display: none;
-    align-items: center; justify-content: center;
-    z-index: 200;
-    flex-direction: column;
-}
-.pack-opening.active { display: flex; }
-.pack-box {
-    font-size: 8rem;
-    animation: packShake 0.6s ease-in-out 3;
-}
-@keyframes packShake {
-    0%, 100% { transform: rotate(0) scale(1); }
-    25% { transform: rotate(-10deg) scale(1.1); }
-    75% { transform: rotate(10deg) scale(1.1); }
-}
-.pack-reveal {
-    animation: packReveal 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-@keyframes packReveal {
-    0% { opacity: 0; transform: scale(0) rotate(180deg); }
-    60% { opacity: 1; transform: scale(1.2) rotate(-10deg); }
-    100% { transform: scale(1) rotate(0); }
-}
-
-/* Кнопки */
-.btn-primary {
-    background: linear-gradient(135deg, #8b5cf6, #3b82f6);
-    color: white;
-    padding: 16px 24px;
-    border-radius: 16px;
-    font-weight: 700;
-    font-size: 16px;
-    border: none;
-    cursor: pointer;
-    width: 100%;
-    box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4);
-    transition: all 0.3s;
-}
-.btn-primary:active { transform: scale(0.97); box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3); }
-
-.section-title {
-    font-size: 13px;
-    font-weight: 700;
-    color: #94a3b8;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin: 20px 0 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-.section-title::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(90deg, rgba(148, 163, 184, 0.3), transparent);
-}
-
-.empty-state {
-    text-align: center;
-    padding: 40px 20px;
-    color: #64748b;
-}
-.empty-state .icon { font-size: 4rem; margin-bottom: 12px; opacity: 0.5; }
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:#0a0e1a;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;padding-bottom:100px;overflow-x:hidden}
+body::before{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at 20% 30%,rgba(139,92,246,.15) 0%,transparent 50%),radial-gradient(circle at 80% 70%,rgba(59,130,246,.15) 0%,transparent 50%),radial-gradient(circle at 50% 50%,rgba(236,72,153,.08) 0%,transparent 60%);animation:bgFloat 20s ease-in-out infinite;z-index:-1}
+@keyframes bgFloat{0%,100%{transform:translate(0,0) rotate(0)}50%{transform:translate(-2%,-2%) rotate(1deg)}}
+.profile-header{background:linear-gradient(135deg,rgba(139,92,246,.2),rgba(59,130,246,.1));border:1px solid rgba(139,92,246,.3);border-radius:24px;padding:24px 20px;margin-bottom:20px;backdrop-filter:blur(10px);animation:slideDown .5s ease-out}
+@keyframes slideDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+.avatar-ring{width:110px;height:110px;border-radius:50%;padding:4px;background:conic-gradient(from 0deg,#8b5cf6,#3b82f6,#ec4899,#8b5cf6);animation:spin 8s linear infinite;margin:0 auto 12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.avatar-inner{width:100%;height:100%;border-radius:50%;background:#1e293b;display:flex;align-items:center;justify-content:center;font-size:3.5rem;animation:spin 8s linear infinite reverse}
+.balance-chip{background:rgba(30,41,59,.8);border:1px solid rgba(148,163,184,.2);border-radius:999px;padding:8px 14px;font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:6px;transition:all .3s}
+.progress-wrap{background:rgba(30,41,59,.6);border-radius:16px;padding:16px;margin-bottom:20px;border:1px solid rgba(148,163,184,.1)}
+.progress-bar{height:10px;background:rgba(15,23,42,.8);border-radius:999px;overflow:hidden;margin-top:10px}
+.progress-fill{height:100%;background:linear-gradient(90deg,#8b5cf6,#3b82f6,#06b6d4);border-radius:999px;transition:width 1.5s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden}
+.progress-fill::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);animation:shimmer 2s infinite}
+@keyframes shimmer{to{transform:translateX(100%)}}
+.tabs{display:flex;gap:8px;margin-bottom:20px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab-btn{padding:12px 20px;border-radius:16px;background:rgba(30,41,59,.8);border:1px solid rgba(148,163,184,.15);color:#94a3b8;font-weight:600;font-size:14px;white-space:nowrap;transition:all .3s;cursor:pointer}
+.tab-btn.active{background:linear-gradient(135deg,#8b5cf6,#3b82f6);color:#fff;border-color:transparent;box-shadow:0 8px 24px rgba(139,92,246,.4);transform:translateY(-2px)}
+.rarity-filters{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.rarity-filters::-webkit-scrollbar{display:none}
+.rarity-chip{padding:8px 14px;border-radius:999px;background:rgba(30,41,59,.8);border:1px solid rgba(148,163,184,.15);color:#94a3b8;font-size:12px;font-weight:600;white-space:nowrap;cursor:pointer;transition:all .3s}
+.rarity-chip.active{color:#fff;transform:scale(1.05)}
+.rarity-chip[data-r="all"].active{background:linear-gradient(135deg,#6366f1,#8b5cf6);border-color:transparent}
+.rarity-chip[data-r="common"].active{background:#6b7280;border-color:#9ca3af}
+.rarity-chip[data-r="uncommon"].active{background:#059669;border-color:#4ade80}
+.rarity-chip[data-r="rare"].active{background:#2563eb;border-color:#60a5fa}
+.rarity-chip[data-r="epic"].active{background:#7c3aed;border-color:#c084fc}
+.rarity-chip[data-r="legendary"].active{background:#d97706;border-color:#fbbf24}
+.rarity-chip[data-r="ultra"].active{background:linear-gradient(90deg,#be123c,#fbbf24);border-color:#f43f5e}
+.cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.card{position:relative;border-radius:16px;aspect-ratio:3/4;overflow:hidden;cursor:pointer;transition:all .3s cubic-bezier(.4,0,.2,1);animation:cardIn .5s ease-out backwards}
+@keyframes cardIn{from{opacity:0;transform:translateY(20px) scale(.9)}to{opacity:1;transform:translateY(0) scale(1)}}
+.card:active{transform:scale(.92)}
+.card-bg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:3.5rem;transition:transform .5s}
+.card:hover .card-bg{transform:scale(1.1) rotate(-5deg)}
+.card-info{position:absolute;bottom:0;left:0;right:0;padding:10px 8px 8px;background:linear-gradient(to top,rgba(0,0,0,.9),transparent);text-align:center}
+.card-name{font-size:11px;font-weight:700;line-height:1.2}
+.card-count{position:absolute;top:6px;left:6px;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);border-radius:999px;padding:2px 8px;font-size:10px;font-weight:700;border:1px solid rgba(255,255,255,.2)}
+.r-common{background:linear-gradient(135deg,#4b5563,#6b7280,#9ca3af)}
+.r-uncommon{background:linear-gradient(135deg,#065f46,#059669,#34d399)}
+.r-rare{background:linear-gradient(135deg,#1e40af,#2563eb,#60a5fa);box-shadow:0 0 20px rgba(96,165,250,.5)}
+.r-epic{background:linear-gradient(135deg,#5b21b6,#7c3aed,#a78bfa);box-shadow:0 0 25px rgba(167,139,250,.6)}
+.r-legendary{background:linear-gradient(135deg,#92400e,#d97706,#fbbf24);box-shadow:0 0 30px rgba(251,191,36,.7);animation:legendaryPulse 2s infinite}
+.r-ultra{background:linear-gradient(135deg,#881337,#e11d48,#fbbf24,#e11d48);background-size:300% 300%;animation:ultraShift 3s infinite;box-shadow:0 0 35px rgba(244,63,94,.8)}
+@keyframes legendaryPulse{0%,100%{box-shadow:0 0 30px rgba(251,191,36,.7)}50%{box-shadow:0 0 45px rgba(251,191,36,1)}}
+@keyframes ultraShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.card.locked{filter:grayscale(1) brightness(.4);opacity:.5}
+.card.locked .card-bg{font-size:2.5rem}
+.particle{position:absolute;width:4px;height:4px;background:#fff;border-radius:50%;pointer-events:none;animation:float 3s infinite ease-in-out}
+@keyframes float{0%,100%{transform:translateY(0) scale(1);opacity:.8}50%{transform:translateY(-15px) scale(1.5);opacity:.3}}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
+.modal.active{display:flex;animation:fadeIn .3s}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal-content{background:linear-gradient(135deg,#1e293b,#0f172a);border:1px solid rgba(139,92,246,.3);border-radius:24px;padding:24px;max-width:340px;width:100%;animation:modalIn .4s cubic-bezier(.34,1.56,.64,1)}
+@keyframes modalIn{from{opacity:0;transform:scale(.8) translateY(30px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.pack-opening{position:fixed;inset:0;background:radial-gradient(circle,rgba(139,92,246,.3),rgba(10,14,26,.95));display:none;align-items:center;justify-content:center;z-index:200;flex-direction:column}
+.pack-opening.active{display:flex}
+.pack-box{font-size:8rem;animation:packShake .6s ease-in-out 3}
+@keyframes packShake{0%,100%{transform:rotate(0) scale(1)}25%{transform:rotate(-10deg) scale(1.1)}75%{transform:rotate(10deg) scale(1.1)}}
+.btn-primary{background:linear-gradient(135deg,#8b5cf6,#3b82f6);color:#fff;padding:16px 24px;border-radius:16px;font-weight:700;font-size:16px;border:none;cursor:pointer;width:100%;box-shadow:0 8px 24px rgba(139,92,246,.4);transition:all .3s}
+.btn-primary:active{transform:scale(.97)}
+.section-title{font-size:13px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;margin:20px 0 12px;display:flex;align-items:center;gap:8px}
+.section-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(148,163,184,.3),transparent)}
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#8b5cf6,#3b82f6);color:#fff;padding:14px 24px;border-radius:16px;font-weight:600;z-index:300;box-shadow:0 10px 30px rgba(139,92,246,.5);animation:toastIn .4s;pointer-events:none}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 </style>
 </head>
 <body>
 <div class="max-w-md mx-auto px-4 pt-4">
-
-    <!-- Профиль -->
     <div class="profile-header">
         <div class="avatar-ring"><div class="avatar-inner" id="avatar">🐱</div></div>
         <h2 class="text-xl font-bold text-center" id="username">Гость</h2>
         <p class="text-center text-xs opacity-60 mt-1" id="user-title">Игрок</p>
         <div class="flex justify-center gap-2 mt-4 flex-wrap">
-            <div class="balance-chip">🐟 <span id="fish">0</span></div>
-            <div class="balance-chip">💎 <span id="tails">0</span></div>
+            <div class="balance-chip">🐟 <span id="fish">1250</span></div>
+            <div class="balance-chip">💎 <span id="tails">15</span></div>
             <div class="balance-chip">🎴 <span id="cards-collected">0</span></div>
         </div>
     </div>
-
-    <!-- Прогресс -->
     <div class="progress-wrap">
         <div class="flex justify-between items-center">
             <span class="text-sm font-bold">📊 Коллекция</span>
             <span class="text-sm font-bold" id="progress-text">0 / 60</span>
         </div>
-        <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width: 0%"></div></div>
+        <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
     </div>
-
-    <!-- Вкладки -->
     <div class="tabs">
         <button class="tab-btn active" data-tab="collection">🎴 Коллекция</button>
         <button class="tab-btn" data-tab="pack">📦 Пак</button>
         <button class="tab-btn" data-tab="auction">🏛️ Аукцион</button>
     </div>
-
-    <!-- Коллекция -->
     <div id="tab-collection" class="tab-content">
         <div class="rarity-filters">
-            <button class="rarity-chip active" data-r="all">Все <span id="cnt-all"></span></button>
+            <button class="rarity-chip active" data-r="all">Все</button>
             <button class="rarity-chip" data-r="common">⚪ Обычные</button>
             <button class="rarity-chip" data-r="uncommon">🟢 Необычные</button>
             <button class="rarity-chip" data-r="rare">🔵 Редкие</button>
@@ -397,9 +111,7 @@ body::before {
         </div>
         <div id="cards-container"></div>
     </div>
-
-    <!-- Пак -->
-    <div id="tab-pack" class="tab-content hidden">
+    <div id="tab-pack" class="tab-content" style="display:none">
         <div class="profile-header text-center">
             <div class="text-7xl mb-3">📦</div>
             <h3 class="text-xl font-bold mb-2">Открыть пак карточек</h3>
@@ -415,9 +127,7 @@ body::before {
             <button class="btn-primary" onclick="openPack()">Открыть за 100 🐟</button>
         </div>
     </div>
-
-    <!-- Аукцион -->
-    <div id="tab-auction" class="tab-content hidden">
+    <div id="tab-auction" class="tab-content" style="display:none">
         <div class="profile-header text-center">
             <div class="text-7xl mb-3">🏛️</div>
             <h3 class="text-xl font-bold mb-2">Аукцион карточек</h3>
@@ -426,24 +136,19 @@ body::before {
                 <p class="text-yellow-400 font-bold">⚠️ Временно недоступно</p>
                 <p class="text-xs opacity-60 mt-1">Функция в разработке. Скоро появится!</p>
             </div>
-            <button class="btn-primary" style="opacity:0.5; cursor:not-allowed;">Скоро...</button>
+            <button class="btn-primary" style="opacity:.5;cursor:not-allowed" onclick="showToast('Аукцион скоро откроется! 🏛️')">Скоро...</button>
         </div>
     </div>
-
 </div>
-
-<!-- Модалка карточки -->
 <div id="card-modal" class="modal">
     <div class="modal-content">
-        <div id="modal-card" class="card mx-auto mb-4" style="max-width: 220px;"></div>
+        <div id="modal-card" class="card mx-auto mb-4" style="max-width:220px"></div>
         <h3 id="modal-name" class="text-xl font-bold text-center mb-1"></h3>
         <p id="modal-desc" class="text-sm opacity-60 text-center mb-3"></p>
         <div id="modal-rarity" class="text-center mb-4"></div>
         <button class="btn-primary" onclick="closeModal()">Закрыть</button>
     </div>
 </div>
-
-<!-- Анимация пака -->
 <div id="pack-anim" class="pack-opening">
     <div id="pack-content" class="text-center">
         <div class="pack-box">📦</div>
@@ -452,24 +157,34 @@ body::before {
 </div>
 
 <script>
-const tg = window.Telegram.WebApp;
-tg.ready(); tg.expand();
+// === Telegram Web App (с fallback для браузера) ===
+const tg = (window.Telegram && window.Telegram.WebApp) ? window.Telegram.WebApp : null;
+if (tg) { tg.ready(); tg.expand(); }
 
-// === ДАННЫЕ ПОЛЬЗОВАТЕЛЯ (из URL параметров) ===
+function showToast(msg) {
+    const t = document.createElement('div');
+    t.className = 'toast';
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 2500);
+}
+
+// === Получаем данные (из URL или Telegram, или демо) ===
 const params = new URLSearchParams(window.location.search);
-const user = tg.initDataUnsafe?.user;
-const uid = params.get('uid') || user?.id || 0;
-const fishBal = parseInt(params.get('fish') || 0);
-const tailsBal = parseInt(params.get('tails') || 0);
+const isTelegram = !!tg;
+const user = isTelegram ? tg.initDataUnsafe?.user : null;
+
+const userName = params.get('name') || (user ? user.first_name : 'Гость');
+const fishBal = parseInt(params.get('fish')) || (isTelegram ? 0 : 1250);
+const tailsBal = parseInt(params.get('tails')) || (isTelegram ? 0 : 15);
 const vip = params.get('vip') === '1';
-const userName = params.get('name') || user?.first_name || 'Гость';
 
 document.getElementById('username').innerText = userName;
-document.getElementById('user-title').innerText = vip ? '👑 VIP-игрок' : 'Игрок';
+document.getElementById('user-title').innerText = vip ? '👑 VIP-игрок' : (isTelegram ? 'Игрок' : 'Демо-режим');
 document.getElementById('fish').innerText = fishBal;
 document.getElementById('tails').innerText = tailsBal;
 
-// === ВСЕ 60 КАРТОЧЕК ===
+// === 60 КАРТОЧЕК ===
 const ALL_CARDS = [
     {id:"c01",name:"🐱 Кот-неко",r:"common",e:"🐱",d:"Милый котик с ушками"},
     {id:"c02",name:"🐶 Пёс-ину",r:"common",e:"🐶",d:"Верный друг с хвостиком"},
@@ -519,4 +234,142 @@ const ALL_CARDS = [
     {id:"u16",name:"🐺 Стая волков",r:"uncommon",e:"🐺",d:"Вместе сила"},
     {id:"u17",name:"🦊 Тануки",r:"uncommon",e:"🦊",d:"Оборотень из мифов"},
     {id:"r01",name:"🦄 Единорог",r:"rare",e:"🦄",d:"Магическое существо"},
-    {id:"r02",name:"🐉 Дракончик",r:"rare",e:"🐉",d:"Маленький, но гроз
+    {id:"r02",name:"🐉 Дракончик",r:"rare",e:"🐉",d:"Маленький, но грозный"},
+    {id:"r03",name:"🧚 Фея-лисичка",r:"rare",e:"🧚",d:"Волшебная помощница"},
+    {id:"r04",name:"🧜 Русалка-кошка",r:"rare",e:"🧜",d:"Повелительница морей"},
+    {id:"r05",name:"🦚 Павлин",r:"rare",e:"🦚",d:"Яркое оперение"},
+    {id:"r06",name:"🦜 Попугай-воин",r:"rare",e:"🦜",d:"Разговорчивый друг"},
+    {id:"r07",name:"🐠 Рыбка-нимфа",r:"rare",e:"🐠",d:"Разноцветная красавица"},
+    {id:"r08",name:"🦩 Фламинго",r:"rare",e:"🦩",d:"Элегантная поза"},
+    {id:"e01",name:"🐲 Древний дракон",r:"epic",e:"🐲",d:"Дышит огнём"},
+    {id:"e02",name:"🦊 Великая кицунэ",r:"epic",e:"🦊",d:"Великая лиса"},
+    {id:"e03",name:"🐺 Альфа-оборотень",r:"epic",e:"🐺",d:"Вожак стаи"},
+    {id:"e04",name:"🦄 Аликорн",r:"epic",e:"🦄",d:"Крылатый единорог"},
+    {id:"e05",name:"🐉 Восточный дракон",r:"epic",e:"🐉",d:"Мудрость веков"},
+    {id:"e06",name:"🦅 Феникс",r:"epic",e:"🦅",d:"Из пепла"},
+    {id:"e07",name:"🧚 Королева фей",r:"epic",e:"🧚",d:"Повелительница леса"},
+    {id:"l01",name:"🦁 Король-лев",r:"legendary",e:"🦁",d:"Правитель саванны"},
+    {id:"l02",name:"🐉 Император драконов",r:"legendary",e:"🐉",d:"Властелин стихий"},
+    {id:"l03",name:"🦊 Богиня-кицунэ",r:"legendary",e:"🦊",d:"Древнее божество"},
+    {id:"l04",name:"🦄 Золотой аликорн",r:"legendary",e:"🦄",d:"Сияние небес"},
+    {id:"ultra01",name:"✨ Космо-фурри",r:"ultra",e:"🌌",d:"Из другой галактики"}
+];
+
+const RARITY_LABEL = {common:"⚪ Обычная",uncommon:"🟢 Необычная",rare:"🔵 Редкая",epic:"🟣 Эпическая",legendary:"🟡 Легендарная",ultra:"🔴 Ультра"};
+
+// === Полученные карточки ===
+let owned = {};
+try { owned = JSON.parse(params.get('cards') || '{}'); } catch(e) { owned = {}; }
+// В демо-режиме (браузер) показываем пример коллекции
+if (!isTelegram && Object.keys(owned).length === 0) {
+    owned = {c01:3, c03:1, c07:2, u01:1, r01:2, e01:1, l01:1};
+}
+
+const collectedCount = Object.keys(owned).length;
+document.getElementById('cards-collected').innerText = collectedCount;
+document.getElementById('progress-text').innerText = `${collectedCount} / 60`;
+setTimeout(() => document.getElementById('progress-fill').style.width = (collectedCount/60*100) + '%', 300);
+
+// === Рендер карточек ===
+let currentFilter = 'all';
+
+function renderCards() {
+    const container = document.getElementById('cards-container');
+    container.innerHTML = '';
+    const filtered = currentFilter === 'all' ? ALL_CARDS : ALL_CARDS.filter(c => c.r === currentFilter);
+    const groups = {};
+    filtered.forEach(c => { (groups[c.r] = groups[c.r] || []).push(c); });
+    const order = ['ultra','legendary','epic','rare','uncommon','common'];
+    let anyShown = false;
+    order.forEach(r => {
+        if (!groups[r]) return;
+        anyShown = true;
+        const title = document.createElement('div');
+        title.className = 'section-title';
+        const ownedInGroup = groups[r].filter(c => owned[c.id]).length;
+        title.innerHTML = `${RARITY_LABEL[r]} <span class="text-xs opacity-50">(${ownedInGroup}/${groups[r].length})</span>`;
+        container.appendChild(title);
+        const grid = document.createElement('div');
+        grid.className = 'cards-grid';
+        groups[r].forEach((card, i) => {
+            const count = owned[card.id] || 0;
+            const el = document.createElement('div');
+            el.className = `card r-${card.r} ${count === 0 ? 'locked' : ''}`;
+            el.style.animationDelay = (i * 0.03) + 's';
+            let particles = '';
+            if (['epic','legendary','ultra'].includes(card.r) && count > 0) {
+                for (let p = 0; p < 3; p++) {
+                    particles += `<div class="particle" style="top:${20+p*20}%;left:${10+p*30}%;animation-delay:${p*0.5}s"></div>`;
+                }
+            }
+            el.innerHTML = `
+                ${count > 0 ? `<div class="card-count">×${count}</div>` : ''}
+                <div class="card-bg">${count > 0 ? card.e : '❓'}</div>
+                <div class="card-info"><div class="card-name">${count > 0 ? card.name.replace(/^[^\s]+\s/, '') : '???'}</div></div>
+                ${particles}`;
+            el.onclick = () => showCardModal(card, count);
+            grid.appendChild(el);
+        });
+        container.appendChild(grid);
+    });
+    if (!anyShown) {
+        container.innerHTML = '<div style="text-align:center;padding:40px;color:#64748b">Нет карточек этой редкости</div>';
+    }
+}
+
+// === Модалка ===
+function showCardModal(card, count) {
+    const mc = document.getElementById('modal-card');
+    mc.className = `card r-${card.r} ${count === 0 ? 'locked' : ''}`;
+    mc.innerHTML = `<div class="card-bg">${count > 0 ? card.e : '❓'}</div>`;
+    document.getElementById('modal-name').innerText = count > 0 ? card.name : '???';
+    document.getElementById('modal-desc').innerText = count > 0 ? card.d : 'Эта карточка ещё не найдена';
+    document.getElementById('modal-rarity').innerHTML = `<span class="balance-chip">${RARITY_LABEL[card.r]} • У вас: ${count} шт.</span>`;
+    document.getElementById('card-modal').classList.add('active');
+}
+function closeModal() { document.getElementById('card-modal').classList.remove('active'); }
+document.getElementById('card-modal').addEventListener('click', (e) => { if (e.target.id === 'card-modal') closeModal(); });
+
+// === Вкладки ===
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+        btn.classList.add('active');
+        document.getElementById('tab-' + btn.dataset.tab).style.display = 'block';
+    });
+});
+
+// === Фильтры ===
+document.querySelectorAll('.rarity-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+        document.querySelectorAll('.rarity-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        currentFilter = chip.dataset.r;
+        renderCards();
+    });
+});
+
+// === Открытие пака ===
+function openPack() {
+    const anim = document.getElementById('pack-anim');
+    const content = document.getElementById('pack-content');
+    content.innerHTML = '<div class="pack-box">📦</div><p class="mt-4 text-lg font-bold">Открываем...</p>';
+    anim.classList.add('active');
+    setTimeout(() => {
+        content.innerHTML = '<div class="pack-box" style="animation:none">✨</div><p class="mt-4 text-lg font-bold">Та-дам!</p>';
+    }, 1800);
+    setTimeout(() => {
+        anim.classList.remove('active');
+        if (isTelegram) {
+            tg.sendData(JSON.stringify({action: 'confirm_open_pack'}));
+        } else {
+            showToast('Открой через Telegram, чтобы получить карточку! 🐾');
+        }
+    }, 2600);
+}
+
+renderCards();
+</script>
+</body>
+</html>
