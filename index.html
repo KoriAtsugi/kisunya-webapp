@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Кисуня — Коллекция</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body { background: var(--tg-theme-bg-color, #0f172a); color: var(--tg-theme-text-color, #fff); font-family: sans-serif; padding-bottom: 80px; }
+        .tab-btn.active { background: #3b82f6; color: white; }
+        .card { position: relative; border-radius: 16px; overflow: hidden; aspect-ratio: 3/4; transition: transform 0.2s; cursor: pointer; }
+        .card:active { transform: scale(0.95); }
+        .card-bg { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 5rem; }
+        .card-info { position: absolute; bottom: 0; left: 0; right: 0; padding: 8px; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); text-align: center; }
+        .card-rarity { position: absolute; top: 6px; right: 6px; padding: 2px 8px; border-radius: 12px; font-size: 10px; font-weight: bold; text-transform: uppercase; }
+        .rarity-common { background: linear-gradient(135deg, #6b7280, #9ca3af); }
+        .rarity-uncommon { background: linear-gradient(135deg, #059669, #4ade80); }
+        .rarity-rare { background: linear-gradient(135deg, #2563eb, #60a5fa); box-shadow: 0 0 20px rgba(96, 165, 250, 0.6); }
+        .rarity-epic { background: linear-gradient(135deg, #7c3aed, #c084fc); box-shadow: 0 0 25px rgba(192, 132, 252, 0.8); }
+        .rarity-legendary { background: linear-gradient(135deg, #d97706, #fbbf24); box-shadow: 0 0 30px rgba(251, 191, 36, 0.9); animation: pulse 2s infinite; }
+        .rarity-ultra { background: linear-gradient(135deg, #be123c, #f43f5e, #fbbf24); box-shadow: 0 0 35px rgba(244, 63, 94, 1); animation: ultraGlow 3s infinite; }
+        @keyframes pulse { 0%, 100% { box-shadow: 0 0 30px rgba(251, 191, 36, 0.9); } 50% { box-shadow: 0 0 45px rgba(251, 191, 36, 1); } }
+        @keyframes ultraGlow { 0%, 100% { box-shadow: 0 0 35px rgba(244, 63, 94, 1); } 50% { box-shadow: 0 0 50px rgba(251, 191, 36, 1); } }
+        .badge-common { background: #6b7280; color: white; }
+        .badge-uncommon { background: #059669; color: white; }
+        .badge-rare { background: #2563eb; color: white; }
+        .badge-epic { background: #7c3aed; color: white; }
+        .badge-legendary { background: #d97706; color: white; }
+        .badge-ultra { background: linear-gradient(90deg, #be123c, #fbbf24); color: white; }
+        .avatar { width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, #3b82f6, #8b5cf6); display: flex; align-items: center; justify-content: center; font-size: 3rem; margin: 0 auto; box-shadow: 0 0 30px rgba(139, 92, 246, 0.5); }
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; z-index: 100; padding: 20px; }
+        .modal.active { display: flex; }
+        .modal-content { background: #1e293b; border-radius: 20px; padding: 20px; max-width: 400px; width: 100%; }
+    </style>
+</head>
+<body>
+    <div class="max-w-md mx-auto p-4">
+        <div class="bg-slate-800 rounded-2xl p-5 mb-4 text-center">
+            <div class="avatar mb-3" id="avatar-emoji">🐱</div>
+            <h2 class="text-xl font-bold" id="username">Загрузка...</h2>
+            <div class="flex justify-center gap-4 mt-3 text-sm">
+                <div class="bg-slate-700 px-3 py-1 rounded-full">🐟 <span id="fish">0</span></div>
+                <div class="bg-slate-700 px-3 py-1 rounded-full">💎 <span id="tails">0</span></div>
+                <div class="bg-slate-700 px-3 py-1 rounded-full">🎴 <span id="cards-count">0</span></div>
+            </div>
+        </div>
+
+        <div class="flex gap-2 mb-4 overflow-x-auto pb-2">
+            <button class="tab-btn active px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap bg-slate-700" onclick="showTab('collection')">🎴 Коллекция</button>
+            <button class="tab-btn px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap bg-slate-700" onclick="showTab('pack')">📦 Открыть</button>
+            <button class="tab-btn px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap bg-slate-700" onclick="showTab('auction')">🏛️ Аукцион</button>
+        </div>
+
+        <div id="tab-collection" class="tab-content">
+            <div class="flex gap-2 mb-3 overflow-x-auto pb-2">
+                <button onclick="filterCards('all')" class="filter-btn px-3 py-1 rounded-full text-xs bg-blue-500">Все</button>
+                <button onclick="filterCards('rare')" class="filter-btn px-3 py-1 rounded-full text-xs bg-slate-700">🔵 Редкие+</button>
+            </div>
+            <div id="cards-grid" class="grid grid-cols-3 gap-2"></div>
+        </div>
+
+        <div id="tab-pack" class="tab-content hidden">
+            <div class="bg-slate-800 rounded-2xl p-6 text-center">
+                <div class="text-6xl mb-4">📦</div>
+                <h3 class="text-xl font-bold mb-2">Открыть пак карточек</h3>
+                <button onclick="openPack()" class="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white py-3 rounded-xl font-bold text-lg mt-4">Открыть за 100 🐟</button>
+            </div>
+        </div>
+
+        <div id="tab-auction" class="tab-content hidden">
+            <div class="bg-slate-800 rounded-2xl p-6 text-center">
+                <div class="text-6xl mb-4">🏛️</div>
+                <h3 class="text-xl font-bold mb-2">Аукцион карточек</h3>
+                <div class="bg-yellow-500/20 border border-yellow-500 rounded-xl p-4 mb-4">
+                    <p class="text-yellow-400 font-bold">⚠️ Временно не работает</p>
+                    <p class="text-xs opacity-60 mt-1">Функция в разработке. Скоро появится!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="card-modal" class="modal" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div id="modal-card" class="card mx-auto mb-4" style="max-width: 250px;"></div>
+            <h3 id="modal-name" class="text-xl font-bold text-center mb-1"></h3>
+            <p id="modal-desc" class="text-sm opacity-60 text-center mb-3"></p>
+            <button onclick="closeModalDirect()" class="w-full bg-slate-700 py-2 rounded-xl">Закрыть</button>
+        </div>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.ready(); tg.expand();
+        const user = tg.initDataUnsafe?.user;
+        if (user) {
+            document.getElementById('username').innerText = user.first_name;
+            document.getElementById('fish').innerText = "1250";
+            document.getElementById('tails').innerText = "15";
+            document.getElementById('cards-count').innerText = "5";
+        }
+
+        const ALL_CARDS = {
+            "c01": {"name": "🐱 Кот-неко", "rarity": "common", "emoji": "🐱", "desc": "Милый котик"},
+            "u01": {"name": "🐺 Волк", "rarity": "uncommon", "emoji": "🐺", "desc": "Воет на луну"},
+            "r01": {"name": "🦄 Единорог", "rarity": "rare", "emoji": "🦄", "desc": "Магическое существо"},
+            "e01": {"name": "🐲 Дракон", "rarity": "epic", "emoji": "🐲", "desc": "Дышит огнём"},
+            "l01": {"name": "👑 Король-лев", "rarity": "legendary", "emoji": "🦁", "desc": "Правитель"},
+            "ultra01": {"name": "✨ Космо-фурри", "rarity": "ultra", "emoji": "🌌", "desc": "Из другой галактики"}
+        };
+
+        let userCards = [{id: "c01", count: 3}, {id: "r01", count: 1}, {id: "l01", count: 1}];
+
+        function showTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById('tab-' + tabName).classList.remove('hidden');
+            event.target.classList.add('active');
+            if (tabName === 'collection') renderCards('all');
+        }
+
+        function renderCards(filter) {
+            const grid = document.getElementById('cards-grid');
+            grid.innerHTML = '';
+            const cardsToShow = filter === 'all' ? Object.entries(ALL_CARDS) : Object.entries(ALL_CARDS).filter(([id, c]) => ['rare','epic','legendary','ultra'].includes(c.rarity));
+            
+            cardsToShow.forEach(([id, card]) => {
+                const owned = userCards.find(c => c.id === id);
+                const count = owned ? owned.count : 0;
+                const div = document.createElement('div');
+                div.className = `card rarity-${card.rarity}`;
+                div.onclick = () => showCardModal(id);
+                div.innerHTML = `
+                    <div class="card-bg">${count > 0 ? card.emoji : '❓'}</div>
+                    <div class="card-rarity badge-${card.rarity}">${card.rarity === 'common' ? '⚪' : card.rarity === 'uncommon' ? '🟢' : card.rarity === 'rare' ? '🔵' : card.rarity === 'epic' ? '🟣' : card.rarity === 'legendary' ? '🟡' : '🔴'}</div>
+                    <div class="card-info"><div class="text-xs font-bold truncate">${count > 0 ? card.name.replace(/^[^\s]+ /, '') : '???'}</div>${count > 0 ? `<div class="text-xs opacity-70">×${count}</div>` : ''}</div>
+                `;
+                grid.appendChild(div);
+            });
+        }
+
+        function filterCards(filter) {
+            document.querySelectorAll('.filter-btn').forEach(b => { b.classList.remove('bg-blue-500'); b.classList.add('bg-slate-700'); });
+            event.target.classList.remove('bg-slate-700');
+            event.target.classList.add('bg-blue-500');
+            renderCards(filter);
+        }
+
+        function showCardModal(id) {
+            const card = ALL_CARDS[id];
+            const owned = userCards.find(c => c.id === id);
+            const count = owned ? owned.count : 0;
+            document.getElementById('modal-card').className = `card rarity-${card.rarity}`;
+            document.getElementById('modal-card').innerHTML = `<div class="card-bg">${card.emoji}</div><div class="card-rarity badge-${card.rarity}">${card.rarity}</div>`;
+            document.getElementById('modal-name').innerText = card.name;
+            document.getElementById('modal-desc').innerText = card.desc + (count > 0 ? `\nУ вас: ${count} шт.` : '\nНе получено');
+            document.getElementById('card-modal').classList.add('active');
+        }
+        function closeModal(e) { if (e.target.id === 'card-modal') closeModalDirect(); }
+        function closeModalDirect() { document.getElementById('card-modal').classList.remove('active'); }
+
+        function openPack() {
+            tg.sendData(JSON.stringify({action: 'confirm_open_pack'}));
+        }
+
+        renderCards('all');
+    </script>
+</body>
+</html>
