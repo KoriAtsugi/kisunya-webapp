@@ -1,169 +1,522 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Кисуня — Коллекция</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        body { background: var(--tg-theme-bg-color, #0f172a); color: var(--tg-theme-text-color, #fff); font-family: sans-serif; padding-bottom: 80px; }
-        .tab-btn.active { background: #3b82f6; color: white; }
-        .card { position: relative; border-radius: 16px; overflow: hidden; aspect-ratio: 3/4; transition: transform 0.2s; cursor: pointer; }
-        .card:active { transform: scale(0.95); }
-        .card-bg { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 5rem; }
-        .card-info { position: absolute; bottom: 0; left: 0; right: 0; padding: 8px; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); text-align: center; }
-        .card-rarity { position: absolute; top: 6px; right: 6px; padding: 2px 8px; border-radius: 12px; font-size: 10px; font-weight: bold; text-transform: uppercase; }
-        .rarity-common { background: linear-gradient(135deg, #6b7280, #9ca3af); }
-        .rarity-uncommon { background: linear-gradient(135deg, #059669, #4ade80); }
-        .rarity-rare { background: linear-gradient(135deg, #2563eb, #60a5fa); box-shadow: 0 0 20px rgba(96, 165, 250, 0.6); }
-        .rarity-epic { background: linear-gradient(135deg, #7c3aed, #c084fc); box-shadow: 0 0 25px rgba(192, 132, 252, 0.8); }
-        .rarity-legendary { background: linear-gradient(135deg, #d97706, #fbbf24); box-shadow: 0 0 30px rgba(251, 191, 36, 0.9); animation: pulse 2s infinite; }
-        .rarity-ultra { background: linear-gradient(135deg, #be123c, #f43f5e, #fbbf24); box-shadow: 0 0 35px rgba(244, 63, 94, 1); animation: ultraGlow 3s infinite; }
-        @keyframes pulse { 0%, 100% { box-shadow: 0 0 30px rgba(251, 191, 36, 0.9); } 50% { box-shadow: 0 0 45px rgba(251, 191, 36, 1); } }
-        @keyframes ultraGlow { 0%, 100% { box-shadow: 0 0 35px rgba(244, 63, 94, 1); } 50% { box-shadow: 0 0 50px rgba(251, 191, 36, 1); } }
-        .badge-common { background: #6b7280; color: white; }
-        .badge-uncommon { background: #059669; color: white; }
-        .badge-rare { background: #2563eb; color: white; }
-        .badge-epic { background: #7c3aed; color: white; }
-        .badge-legendary { background: #d97706; color: white; }
-        .badge-ultra { background: linear-gradient(90deg, #be123c, #fbbf24); color: white; }
-        .avatar { width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, #3b82f6, #8b5cf6); display: flex; align-items: center; justify-content: center; font-size: 3rem; margin: 0 auto; box-shadow: 0 0 30px rgba(139, 92, 246, 0.5); }
-        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; z-index: 100; padding: 20px; }
-        .modal.active { display: flex; }
-        .modal-content { background: #1e293b; border-radius: 20px; padding: 20px; max-width: 400px; width: 100%; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Кисуня — Коллекция</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body {
+    background: #0a0e1a;
+    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    padding-bottom: 100px;
+    overflow-x: hidden;
+}
+
+/* Фоновые градиенты */
+body::before {
+    content: '';
+    position: fixed;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle at 20% 30%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(236, 72, 153, 0.08) 0%, transparent 60%);
+    animation: bgFloat 20s ease-in-out infinite;
+    z-index: -1;
+}
+@keyframes bgFloat {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    50% { transform: translate(-2%, -2%) rotate(1deg); }
+}
+
+/* Профиль */
+.profile-header {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(59, 130, 246, 0.1));
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    border-radius: 24px;
+    padding: 24px 20px;
+    margin-bottom: 20px;
+    backdrop-filter: blur(10px);
+    animation: slideDown 0.5s ease-out;
+}
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.avatar-ring {
+    width: 110px; height: 110px;
+    border-radius: 50%;
+    padding: 4px;
+    background: conic-gradient(from 0deg, #8b5cf6, #3b82f6, #ec4899, #8b5cf6);
+    animation: spin 8s linear infinite;
+    margin: 0 auto 12px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.avatar-inner {
+    width: 100%; height: 100%;
+    border-radius: 50%;
+    background: #1e293b;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 3.5rem;
+    animation: spin 8s linear infinite reverse;
+}
+
+.balance-chip {
+    background: rgba(30, 41, 59, 0.8);
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-size: 14px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s;
+}
+.balance-chip:hover { transform: translateY(-2px); border-color: rgba(139, 92, 246, 0.5); }
+
+/* Прогресс-бар */
+.progress-wrap {
+    background: rgba(30, 41, 59, 0.6);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(148, 163, 184, 0.1);
+}
+.progress-bar {
+    height: 10px;
+    background: rgba(15, 23, 42, 0.8);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #8b5cf6, #3b82f6, #06b6d4);
+    border-radius: 999px;
+    transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+.progress-fill::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    animation: shimmer 2s infinite;
+}
+@keyframes shimmer { to { transform: translateX(100%); } }
+
+/* Вкладки */
+.tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+}
+.tabs::-webkit-scrollbar { display: none; }
+.tab-btn {
+    padding: 12px 20px;
+    border-radius: 16px;
+    background: rgba(30, 41, 59, 0.8);
+    border: 1px solid rgba(148, 163, 184, 0.15);
+    color: #94a3b8;
+    font-weight: 600;
+    font-size: 14px;
+    white-space: nowrap;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+.tab-btn.active {
+    background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4);
+    transform: translateY(-2px);
+}
+
+/* Фильтры редкости */
+.rarity-filters {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+}
+.rarity-filters::-webkit-scrollbar { display: none; }
+.rarity-chip {
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: rgba(30, 41, 59, 0.8);
+    border: 1px solid rgba(148, 163, 184, 0.15);
+    color: #94a3b8;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.rarity-chip.active { color: white; transform: scale(1.05); }
+.rarity-chip[data-r="all"].active { background: linear-gradient(135deg, #6366f1, #8b5cf6); border-color: transparent; }
+.rarity-chip[data-r="common"].active { background: #6b7280; border-color: #9ca3af; }
+.rarity-chip[data-r="uncommon"].active { background: #059669; border-color: #4ade80; }
+.rarity-chip[data-r="rare"].active { background: #2563eb; border-color: #60a5fa; }
+.rarity-chip[data-r="epic"].active { background: #7c3aed; border-color: #c084fc; }
+.rarity-chip[data-r="legendary"].active { background: #d97706; border-color: #fbbf24; }
+.rarity-chip[data-r="ultra"].active { background: linear-gradient(90deg, #be123c, #fbbf24); border-color: #f43f5e; }
+
+/* Сетка карточек */
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+.card {
+    position: relative;
+    border-radius: 16px;
+    aspect-ratio: 3/4;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: cardIn 0.5s ease-out backwards;
+}
+@keyframes cardIn {
+    from { opacity: 0; transform: translateY(20px) scale(0.9); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.card:active { transform: scale(0.92); }
+
+.card-bg {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 3.5rem;
+    transition: transform 0.5s;
+}
+.card:hover .card-bg { transform: scale(1.1) rotate(-5deg); }
+
+.card-info {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 10px 8px 8px;
+    background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+    text-align: center;
+}
+.card-name { font-size: 11px; font-weight: 700; line-height: 1.2; }
+.card-count {
+    position: absolute;
+    top: 6px; left: 6px;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+    border-radius: 999px;
+    padding: 2px 8px;
+    font-size: 10px;
+    font-weight: 700;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+/* Редкости */
+.r-common { background: linear-gradient(135deg, #4b5563, #6b7280, #9ca3af); }
+.r-uncommon { background: linear-gradient(135deg, #065f46, #059669, #34d399); }
+.r-rare { background: linear-gradient(135deg, #1e40af, #2563eb, #60a5fa); box-shadow: 0 0 20px rgba(96, 165, 250, 0.5); }
+.r-epic { background: linear-gradient(135deg, #5b21b6, #7c3aed, #a78bfa); box-shadow: 0 0 25px rgba(167, 139, 250, 0.6); }
+.r-legendary { background: linear-gradient(135deg, #92400e, #d97706, #fbbf24); box-shadow: 0 0 30px rgba(251, 191, 36, 0.7); animation: legendaryPulse 2s infinite; }
+.r-ultra { background: linear-gradient(135deg, #881337, #e11d48, #fbbf24, #e11d48); background-size: 300% 300%; animation: ultraShift 3s infinite; box-shadow: 0 0 35px rgba(244, 63, 94, 0.8); }
+
+@keyframes legendaryPulse {
+    0%, 100% { box-shadow: 0 0 30px rgba(251, 191, 36, 0.7); }
+    50% { box-shadow: 0 0 45px rgba(251, 191, 36, 1); }
+}
+@keyframes ultraShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+.card.locked { filter: grayscale(1) brightness(0.4); opacity: 0.5; }
+.card.locked .card-bg { font-size: 2.5rem; }
+
+/* Частицы для редких */
+.particle {
+    position: absolute;
+    width: 4px; height: 4px;
+    background: white;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: float 3s infinite ease-in-out;
+}
+@keyframes float {
+    0%, 100% { transform: translateY(0) scale(1); opacity: 0.8; }
+    50% { transform: translateY(-15px) scale(1.5); opacity: 0.3; }
+}
+
+/* Модальное окно */
+.modal {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(10px);
+    display: none;
+    align-items: center; justify-content: center;
+    z-index: 100;
+    padding: 20px;
+    animation: fadeIn 0.3s;
+}
+.modal.active { display: flex; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.modal-content {
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    border-radius: 24px;
+    padding: 24px;
+    max-width: 340px;
+    width: 100%;
+    animation: modalIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes modalIn {
+    from { opacity: 0; transform: scale(0.8) translateY(30px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* Анимация открытия пака */
+.pack-opening {
+    position: fixed; inset: 0;
+    background: radial-gradient(circle, rgba(139,92,246,0.3), rgba(10,14,26,0.95));
+    display: none;
+    align-items: center; justify-content: center;
+    z-index: 200;
+    flex-direction: column;
+}
+.pack-opening.active { display: flex; }
+.pack-box {
+    font-size: 8rem;
+    animation: packShake 0.6s ease-in-out 3;
+}
+@keyframes packShake {
+    0%, 100% { transform: rotate(0) scale(1); }
+    25% { transform: rotate(-10deg) scale(1.1); }
+    75% { transform: rotate(10deg) scale(1.1); }
+}
+.pack-reveal {
+    animation: packReveal 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes packReveal {
+    0% { opacity: 0; transform: scale(0) rotate(180deg); }
+    60% { opacity: 1; transform: scale(1.2) rotate(-10deg); }
+    100% { transform: scale(1) rotate(0); }
+}
+
+/* Кнопки */
+.btn-primary {
+    background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+    color: white;
+    padding: 16px 24px;
+    border-radius: 16px;
+    font-weight: 700;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4);
+    transition: all 0.3s;
+}
+.btn-primary:active { transform: scale(0.97); box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3); }
+
+.section-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 20px 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(148, 163, 184, 0.3), transparent);
+}
+
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #64748b;
+}
+.empty-state .icon { font-size: 4rem; margin-bottom: 12px; opacity: 0.5; }
+</style>
 </head>
 <body>
-    <div class="max-w-md mx-auto p-4">
-        <div class="bg-slate-800 rounded-2xl p-5 mb-4 text-center">
-            <div class="avatar mb-3" id="avatar-emoji">🐱</div>
-            <h2 class="text-xl font-bold" id="username">Загрузка...</h2>
-            <div class="flex justify-center gap-4 mt-3 text-sm">
-                <div class="bg-slate-700 px-3 py-1 rounded-full">🐟 <span id="fish">0</span></div>
-                <div class="bg-slate-700 px-3 py-1 rounded-full">💎 <span id="tails">0</span></div>
-                <div class="bg-slate-700 px-3 py-1 rounded-full">🎴 <span id="cards-count">0</span></div>
-            </div>
-        </div>
+<div class="max-w-md mx-auto px-4 pt-4">
 
-        <div class="flex gap-2 mb-4 overflow-x-auto pb-2">
-            <button class="tab-btn active px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap bg-slate-700" onclick="showTab('collection')">🎴 Коллекция</button>
-            <button class="tab-btn px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap bg-slate-700" onclick="showTab('pack')">📦 Открыть</button>
-            <button class="tab-btn px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap bg-slate-700" onclick="showTab('auction')">🏛️ Аукцион</button>
-        </div>
-
-        <div id="tab-collection" class="tab-content">
-            <div class="flex gap-2 mb-3 overflow-x-auto pb-2">
-                <button onclick="filterCards('all')" class="filter-btn px-3 py-1 rounded-full text-xs bg-blue-500">Все</button>
-                <button onclick="filterCards('rare')" class="filter-btn px-3 py-1 rounded-full text-xs bg-slate-700">🔵 Редкие+</button>
-            </div>
-            <div id="cards-grid" class="grid grid-cols-3 gap-2"></div>
-        </div>
-
-        <div id="tab-pack" class="tab-content hidden">
-            <div class="bg-slate-800 rounded-2xl p-6 text-center">
-                <div class="text-6xl mb-4">📦</div>
-                <h3 class="text-xl font-bold mb-2">Открыть пак карточек</h3>
-                <button onclick="openPack()" class="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white py-3 rounded-xl font-bold text-lg mt-4">Открыть за 100 🐟</button>
-            </div>
-        </div>
-
-        <div id="tab-auction" class="tab-content hidden">
-            <div class="bg-slate-800 rounded-2xl p-6 text-center">
-                <div class="text-6xl mb-4">🏛️</div>
-                <h3 class="text-xl font-bold mb-2">Аукцион карточек</h3>
-                <div class="bg-yellow-500/20 border border-yellow-500 rounded-xl p-4 mb-4">
-                    <p class="text-yellow-400 font-bold">⚠️ Временно не работает</p>
-                    <p class="text-xs opacity-60 mt-1">Функция в разработке. Скоро появится!</p>
-                </div>
-            </div>
+    <!-- Профиль -->
+    <div class="profile-header">
+        <div class="avatar-ring"><div class="avatar-inner" id="avatar">🐱</div></div>
+        <h2 class="text-xl font-bold text-center" id="username">Гость</h2>
+        <p class="text-center text-xs opacity-60 mt-1" id="user-title">Игрок</p>
+        <div class="flex justify-center gap-2 mt-4 flex-wrap">
+            <div class="balance-chip">🐟 <span id="fish">0</span></div>
+            <div class="balance-chip">💎 <span id="tails">0</span></div>
+            <div class="balance-chip">🎴 <span id="cards-collected">0</span></div>
         </div>
     </div>
 
-    <div id="card-modal" class="modal" onclick="closeModal(event)">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <div id="modal-card" class="card mx-auto mb-4" style="max-width: 250px;"></div>
-            <h3 id="modal-name" class="text-xl font-bold text-center mb-1"></h3>
-            <p id="modal-desc" class="text-sm opacity-60 text-center mb-3"></p>
-            <button onclick="closeModalDirect()" class="w-full bg-slate-700 py-2 rounded-xl">Закрыть</button>
+    <!-- Прогресс -->
+    <div class="progress-wrap">
+        <div class="flex justify-between items-center">
+            <span class="text-sm font-bold">📊 Коллекция</span>
+            <span class="text-sm font-bold" id="progress-text">0 / 60</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width: 0%"></div></div>
+    </div>
+
+    <!-- Вкладки -->
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="collection">🎴 Коллекция</button>
+        <button class="tab-btn" data-tab="pack">📦 Пак</button>
+        <button class="tab-btn" data-tab="auction">🏛️ Аукцион</button>
+    </div>
+
+    <!-- Коллекция -->
+    <div id="tab-collection" class="tab-content">
+        <div class="rarity-filters">
+            <button class="rarity-chip active" data-r="all">Все <span id="cnt-all"></span></button>
+            <button class="rarity-chip" data-r="common">⚪ Обычные</button>
+            <button class="rarity-chip" data-r="uncommon">🟢 Необычные</button>
+            <button class="rarity-chip" data-r="rare">🔵 Редкие</button>
+            <button class="rarity-chip" data-r="epic">🟣 Эпические</button>
+            <button class="rarity-chip" data-r="legendary">🟡 Легендарные</button>
+            <button class="rarity-chip" data-r="ultra">🔴 Ультра</button>
+        </div>
+        <div id="cards-container"></div>
+    </div>
+
+    <!-- Пак -->
+    <div id="tab-pack" class="tab-content hidden">
+        <div class="profile-header text-center">
+            <div class="text-7xl mb-3">📦</div>
+            <h3 class="text-xl font-bold mb-2">Открыть пак карточек</h3>
+            <p class="text-sm opacity-70 mb-4">Получи случайную фурри-карточку!</p>
+            <div class="bg-slate-900/60 rounded-xl p-4 mb-4 text-left text-xs space-y-1">
+                <div class="flex justify-between"><span>⚪ Обычная</span><span class="opacity-60">50%</span></div>
+                <div class="flex justify-between"><span>🟢 Необычная</span><span class="opacity-60">28%</span></div>
+                <div class="flex justify-between"><span>🔵 Редкая</span><span class="opacity-60">14%</span></div>
+                <div class="flex justify-between"><span>🟣 Эпическая</span><span class="opacity-60">5.5%</span></div>
+                <div class="flex justify-between"><span>🟡 Легендарная</span><span class="opacity-60">2%</span></div>
+                <div class="flex justify-between"><span>🔴 Ультра</span><span class="opacity-60">0.5%</span></div>
+            </div>
+            <button class="btn-primary" onclick="openPack()">Открыть за 100 🐟</button>
         </div>
     </div>
 
-    <script>
-        const tg = window.Telegram.WebApp;
-        tg.ready(); tg.expand();
-        const user = tg.initDataUnsafe?.user;
-        if (user) {
-            document.getElementById('username').innerText = user.first_name;
-            document.getElementById('fish').innerText = "1250";
-            document.getElementById('tails').innerText = "15";
-            document.getElementById('cards-count').innerText = "5";
-        }
+    <!-- Аукцион -->
+    <div id="tab-auction" class="tab-content hidden">
+        <div class="profile-header text-center">
+            <div class="text-7xl mb-3">🏛️</div>
+            <h3 class="text-xl font-bold mb-2">Аукцион карточек</h3>
+            <p class="text-sm opacity-70 mb-4">Выставляй и покупай карточки у других игроков</p>
+            <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-4 mb-4">
+                <p class="text-yellow-400 font-bold">⚠️ Временно недоступно</p>
+                <p class="text-xs opacity-60 mt-1">Функция в разработке. Скоро появится!</p>
+            </div>
+            <button class="btn-primary" style="opacity:0.5; cursor:not-allowed;">Скоро...</button>
+        </div>
+    </div>
 
-        const ALL_CARDS = {
-            "c01": {"name": "🐱 Кот-неко", "rarity": "common", "emoji": "🐱", "desc": "Милый котик"},
-            "u01": {"name": "🐺 Волк", "rarity": "uncommon", "emoji": "🐺", "desc": "Воет на луну"},
-            "r01": {"name": "🦄 Единорог", "rarity": "rare", "emoji": "🦄", "desc": "Магическое существо"},
-            "e01": {"name": "🐲 Дракон", "rarity": "epic", "emoji": "🐲", "desc": "Дышит огнём"},
-            "l01": {"name": "👑 Король-лев", "rarity": "legendary", "emoji": "🦁", "desc": "Правитель"},
-            "ultra01": {"name": "✨ Космо-фурри", "rarity": "ultra", "emoji": "🌌", "desc": "Из другой галактики"}
-        };
+</div>
 
-        let userCards = [{id: "c01", count: 3}, {id: "r01", count: 1}, {id: "l01", count: 1}];
+<!-- Модалка карточки -->
+<div id="card-modal" class="modal">
+    <div class="modal-content">
+        <div id="modal-card" class="card mx-auto mb-4" style="max-width: 220px;"></div>
+        <h3 id="modal-name" class="text-xl font-bold text-center mb-1"></h3>
+        <p id="modal-desc" class="text-sm opacity-60 text-center mb-3"></p>
+        <div id="modal-rarity" class="text-center mb-4"></div>
+        <button class="btn-primary" onclick="closeModal()">Закрыть</button>
+    </div>
+</div>
 
-        function showTab(tabName) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-            document.getElementById('tab-' + tabName).classList.remove('hidden');
-            event.target.classList.add('active');
-            if (tabName === 'collection') renderCards('all');
-        }
+<!-- Анимация пака -->
+<div id="pack-anim" class="pack-opening">
+    <div id="pack-content" class="text-center">
+        <div class="pack-box">📦</div>
+        <p class="mt-4 text-lg font-bold">Открываем...</p>
+    </div>
+</div>
 
-        function renderCards(filter) {
-            const grid = document.getElementById('cards-grid');
-            grid.innerHTML = '';
-            const cardsToShow = filter === 'all' ? Object.entries(ALL_CARDS) : Object.entries(ALL_CARDS).filter(([id, c]) => ['rare','epic','legendary','ultra'].includes(c.rarity));
-            
-            cardsToShow.forEach(([id, card]) => {
-                const owned = userCards.find(c => c.id === id);
-                const count = owned ? owned.count : 0;
-                const div = document.createElement('div');
-                div.className = `card rarity-${card.rarity}`;
-                div.onclick = () => showCardModal(id);
-                div.innerHTML = `
-                    <div class="card-bg">${count > 0 ? card.emoji : '❓'}</div>
-                    <div class="card-rarity badge-${card.rarity}">${card.rarity === 'common' ? '⚪' : card.rarity === 'uncommon' ? '🟢' : card.rarity === 'rare' ? '🔵' : card.rarity === 'epic' ? '🟣' : card.rarity === 'legendary' ? '🟡' : '🔴'}</div>
-                    <div class="card-info"><div class="text-xs font-bold truncate">${count > 0 ? card.name.replace(/^[^\s]+ /, '') : '???'}</div>${count > 0 ? `<div class="text-xs opacity-70">×${count}</div>` : ''}</div>
-                `;
-                grid.appendChild(div);
-            });
-        }
+<script>
+const tg = window.Telegram.WebApp;
+tg.ready(); tg.expand();
 
-        function filterCards(filter) {
-            document.querySelectorAll('.filter-btn').forEach(b => { b.classList.remove('bg-blue-500'); b.classList.add('bg-slate-700'); });
-            event.target.classList.remove('bg-slate-700');
-            event.target.classList.add('bg-blue-500');
-            renderCards(filter);
-        }
+// === ДАННЫЕ ПОЛЬЗОВАТЕЛЯ (из URL параметров) ===
+const params = new URLSearchParams(window.location.search);
+const user = tg.initDataUnsafe?.user;
+const uid = params.get('uid') || user?.id || 0;
+const fishBal = parseInt(params.get('fish') || 0);
+const tailsBal = parseInt(params.get('tails') || 0);
+const vip = params.get('vip') === '1';
+const userName = params.get('name') || user?.first_name || 'Гость';
 
-        function showCardModal(id) {
-            const card = ALL_CARDS[id];
-            const owned = userCards.find(c => c.id === id);
-            const count = owned ? owned.count : 0;
-            document.getElementById('modal-card').className = `card rarity-${card.rarity}`;
-            document.getElementById('modal-card').innerHTML = `<div class="card-bg">${card.emoji}</div><div class="card-rarity badge-${card.rarity}">${card.rarity}</div>`;
-            document.getElementById('modal-name').innerText = card.name;
-            document.getElementById('modal-desc').innerText = card.desc + (count > 0 ? `\nУ вас: ${count} шт.` : '\nНе получено');
-            document.getElementById('card-modal').classList.add('active');
-        }
-        function closeModal(e) { if (e.target.id === 'card-modal') closeModalDirect(); }
-        function closeModalDirect() { document.getElementById('card-modal').classList.remove('active'); }
+document.getElementById('username').innerText = userName;
+document.getElementById('user-title').innerText = vip ? '👑 VIP-игрок' : 'Игрок';
+document.getElementById('fish').innerText = fishBal;
+document.getElementById('tails').innerText = tailsBal;
 
-        function openPack() {
-            tg.sendData(JSON.stringify({action: 'confirm_open_pack'}));
-        }
-
-        renderCards('all');
-    </script>
-</body>
-</html>
+// === ВСЕ 60 КАРТОЧЕК ===
+const ALL_CARDS = [
+    {id:"c01",name:"🐱 Кот-неко",r:"common",e:"🐱",d:"Милый котик с ушками"},
+    {id:"c02",name:"🐶 Пёс-ину",r:"common",e:"🐶",d:"Верный друг с хвостиком"},
+    {id:"c03",name:"🦊 Лисёнок",r:"common",e:"🦊",d:"Хитрый и пушистый"},
+    {id:"c04",name:"🐰 Зайка",r:"common",e:"🐰",d:"Длинные ушки"},
+    {id:"c05",name:"🐻 Мишка",r:"common",e:"🐻",d:"Большой и добрый"},
+    {id:"c06",name:"🐼 Панда",r:"common",e:"🐼",d:"Чёрно-белый пушистик"},
+    {id:"c07",name:"🐨 Коала",r:"common",e:"🐨",d:"Спит на эвкалипте"},
+    {id:"c08",name:"🦝 Енотик",r:"common",e:"🦝",d:"Маска на мордочке"},
+    {id:"c09",name:"🐿️ Белочка",r:"common",e:"🐿️",d:"Пушистый хвост"},
+    {id:"c10",name:"🦔 Ёжик",r:"common",e:"🦔",d:"Колючий, но милый"},
+    {id:"c11",name:"🐭 Мышка",r:"common",e:"🐭",d:"Маленькая и быстрая"},
+    {id:"c12",name:"🐹 Хомячок",r:"common",e:"🐹",d:"Щёчки набиты"},
+    {id:"c13",name:"🐸 Лягушонок",r:"common",e:"🐸",d:"Ква-ква!"},
+    {id:"c14",name:"🦎 Ящерка",r:"common",e:"🦎",d:"Быстрая и ловкая"},
+    {id:"c15",name:"🐢 Черепашка",r:"common",e:"🐢",d:"Мудрая и неторопливая"},
+    {id:"c16",name:"🐔 Курочка",r:"common",e:"🐔",d:"Ко-ко-ко!"},
+    {id:"c17",name:"🐧 Пингвин",r:"common",e:"🐧",d:"Смокинг от природы"},
+    {id:"c18",name:"🦆 Уточка",r:"common",e:"🦆",d:"Кря-кря!"},
+    {id:"c19",name:"🦉 Совёнок",r:"common",e:"🦉",d:"Мудрый ночной житель"},
+    {id:"c20",name:"🐦 Птичка",r:"common",e:"🐦",d:"Летает и поёт"},
+    {id:"c21",name:"🦅 Орлёнок",r:"common",e:"🦅",d:"Гордый взгляд"},
+    {id:"c22",name:"🦢 Лебёдушка",r:"common",e:"🦢",d:"Грация и красота"},
+    {id:"c23",name:"🐴 Лошадка",r:"common",e:"🐴",d:"Быстрая и сильная"},
+    {id:"c24",name:"🐮 Коровка",r:"common",e:"🐮",d:"Мууу!"},
+    {id:"c25",name:"🐷 Поросёнок",r:"common",e:"🐷",d:"Розовый и весёлый"},
+    {id:"c26",name:"🐑 Овечка",r:"common",e:"🐑",d:"Мягкая и пушистая"},
+    {id:"c27",name:"🐐 Козлик",r:"common",e:"🐐",d:"Бегает по горам"},
+    {id:"c28",name:"🦌 Оленёнок",r:"common",e:"🦌",d:"Маленькие рожки"},
+    {id:"c29",name:"🐿️ Суслик",r:"common",e:"🐿️",d:"Стоит столбиком"},
+    {id:"c30",name:"🦦 Выдра",r:"common",e:"🦦",d:"Любит плавать"},
+    {id:"u01",name:"🐺 Волк",r:"uncommon",e:"🐺",d:"Воет на луну"},
+    {id:"u02",name:"🦊 Кицунэ",r:"uncommon",e:"🦊",d:"Девятихвостая лиса"},
+    {id:"u03",name:"🐈‍⬛ Чёрный кот",r:"uncommon",e:"🐈‍⬛",d:"Мистический спутник"},
+    {id:"u04",name:"🐕 Хаски",r:"uncommon",e:"🐕",d:"Голубые глаза и вой"},
+    {id:"u05",name:"🦝 Енот-полоскун",r:"uncommon",e:"🦝",d:"Мастер хитрости"},
+    {id:"u06",name:"🐊 Крокодил",r:"uncommon",e:"🐊",d:"Острые зубы"},
+    {id:"u07",name:"🦈 Акула",r:"uncommon",e:"🦈",d:"Хозяйка океана"},
+    {id:"u08",name:"🐙 Осьминожка",r:"uncommon",e:"🐙",d:"Восемь щупалец"},
+    {id:"u09",name:"🦂 Скорпион",r:"uncommon",e:"🦂",d:"Ядовитый хвост"},
+    {id:"u10",name:"🦇 Летучая мышь",r:"uncommon",e:"🦇",d:"Ночной охотник"},
+    {id:"u11",name:"🐍 Змейка",r:"uncommon",e:"🐍",d:"Ловкая и гибкая"},
+    {id:"u12",name:"🦎 Хамелеон",r:"uncommon",e:"🦎",d:"Меняет цвет"},
+    {id:"u13",name:"🦅 Гарпия",r:"uncommon",e:"🦅",d:"Крылатый воин"},
+    {id:"u14",name:"🐦 Феникс-птенец",r:"uncommon",e:"🐦",d:"Юный огненный"},
+    {id:"u15",name:"🦉 Филин",r:"uncommon",e:"🦉",d:"Знает всё"},
+    {id:"u16",name:"🐺 Стая волков",r:"uncommon",e:"🐺",d:"Вместе сила"},
+    {id:"u17",name:"🦊 Тануки",r:"uncommon",e:"🦊",d:"Оборотень из мифов"},
+    {id:"r01",name:"🦄 Единорог",r:"rare",e:"🦄",d:"Магическое существо"},
+    {id:"r02",name:"🐉 Дракончик",r:"rare",e:"🐉",d:"Маленький, но гроз
